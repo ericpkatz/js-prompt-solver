@@ -3,7 +3,7 @@ if(!JWT){
   throw 'JWT environment variable needs to be defined';
 }
 const conn = require('./conn');
-const { STRING, JSON } = conn.Sequelize;
+const { STRING, JSON, BOOLEAN } = conn.Sequelize;
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
@@ -21,8 +21,17 @@ const User = conn.define('user', {
   },
   githubData: {
     type: JSON,
+  },
+  isAdmin: {
+    type: BOOLEAN,
+    defaultValue: false,
+    allowNull: false
   }
 });
+
+const adminList = ()=> {
+  return (process.env.ADMINS || '').split(',');
+};
 
 User.prototype.generateToken = function(){
   return jwt.sign({ id: this.id}, JWT);
@@ -76,11 +85,16 @@ User.authenticate = async(code)=> {
       login
     }
   });
+  console.log(adminList());
   if(!user){
-    user = await User.create({ login, githubData: data, access_token });
+    user = await User.create({ login, githubData: data, access_token, isAdmin: adminList().includes(login)});
   }
   else {
-    await user.update({githubData: data, access_token});
+    const isAdmin = user.isAdmin;
+    if(!isAdmin && adminList().includes(login)){
+      isAdmin = true;
+    }
+    await user.update({githubData: data, access_token, isAdmin });
   }
   return user.generateToken();;
 e};
