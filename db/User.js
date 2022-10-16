@@ -28,6 +28,21 @@ User.prototype.generateToken = function(){
   return jwt.sign({ id: this.id}, JWT);
 }
 
+User.byToken = async(token)=> {
+  const { id } = jwt.verify(token, JWT);
+  const user = await User.findByPk(id, {
+    attributes: {
+      exclude: ['access_token']
+    }
+  });
+  if(!user){
+    const ex = Error('could not find user');
+    ex.status = 401;
+    throw ex;
+  }
+  return user;
+};
+
 
 User.authenticate = async(code)=> {
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
@@ -62,10 +77,10 @@ User.authenticate = async(code)=> {
     }
   });
   if(!user){
-    user = await User.create({ login, github_data: data, access_token });
+    user = await User.create({ login, githubData: data, access_token });
   }
   else {
-    await user.update({github_data, access_token});
+    await user.update({githubData: data, access_token});
   }
   return user.generateToken();;
 e};

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 app.engine('html', require('ejs').renderFile);
+app.use(require('cookie-parser')());
 
 app.use('/dist', express.static('dist'));
 app.use('/assets', express.static('assets'));
