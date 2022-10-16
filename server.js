@@ -8,6 +8,7 @@ try {
     process.env.GITHUB_CLIENT_SECRET = YOUR_VALUE;
     `);
   }
+  throw Error('configure github for authentication');
 }
 catch(ex){
   console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
