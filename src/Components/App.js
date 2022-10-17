@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { attemptLogin, logout } from '../store';
+import { attemptLogin, logout, fetchCourses } from '../store';
 import AdminDashboard from './Admin/Dashboard';
 
 const App = ()=> {
@@ -10,9 +10,17 @@ const App = ()=> {
   const _logout = ()=> {
     dispatch(logout());
   };
+
   useEffect(()=> {
     dispatch(attemptLogin());
   }, []);
+
+  useEffect(()=> {
+    if(auth.isAdmin){
+      dispatch(fetchCourses());
+    }
+  }, [auth]);
+
   return (
 
     <div>

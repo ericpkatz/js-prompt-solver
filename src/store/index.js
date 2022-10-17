@@ -13,6 +13,16 @@ export const attemptLogin = ()=> {
   };
 };
 
+export const fetchCourses = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/courses', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_COURSES', courses: response.data });
+  };
+};
+
 export const logout = ()=> {
   return async(dispatch)=> {
     const response = await axios('/api/auth', {
@@ -22,6 +32,7 @@ export const logout = ()=> {
     dispatch({ type: 'SET_AUTH', auth: {} });
   };
 };
+
 const auth = (state = {}, action)=> {
   if(action.type === 'SET_AUTH'){
     return action.auth;
@@ -29,8 +40,20 @@ const auth = (state = {}, action)=> {
   return state;
 };
 
+const courses = (state = [], action)=> {
+  if(action.type === 'SET_COURSES'){
+    return action.courses;
+  }
+  return state;
+};
+
+const admin = combineReducers({
+  courses
+});
+
 const reducer = combineReducers({
-  auth
+  auth,
+  admin
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));

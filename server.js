@@ -13,13 +13,16 @@ try {
 catch(ex){
   console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
 }
-const { conn } = require('./db');
+const { conn, Course } = require('./db');
 const app = require('./app');
 
 const init = async()=> {
   try {
     if(process.env.SYNC){
       await conn.sync({ force: true });
+      const [ javaScript ] = await Promise.all([
+        Course.create({ title: 'Introduction to JavaScript' })
+      ]);
 
     }
     const port = process.env.PORT || 3000;

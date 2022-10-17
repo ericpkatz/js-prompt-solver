@@ -1,19 +1,59 @@
 const app = require('express').Router();
-const { User } = require('../db');
+const { User, Course } = require('../db');
 
 module.exports = app;
 
-app.get('/auth', async(req, res, next)=> {
+const isLoggedIn = async(req, res,next)=> {
   try {
     if(!req.cookies.authorization || req.cookies.authorization === 'deleted'){
       const error = new Error('not authorized');
       error.status = 401;
       throw error;
     }
-    res.send(await User.byToken(req.cookies.authorization));
+    const user = await User.byToken(req.cookies.authorization); 
+    if(!user){
+      const error = new Error('not authorized');
+      error.status = 401;
+      throw error;
+    }
+    req.user = user;
+    next();
   }
   catch(ex){
     res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
+    next(ex);
+  }
+};
+
+const isAdmin = async(req, res, next)=> {
+  if(req.user && req.user.isAdmin){
+    return next();
+  }
+  const error = new Error('not authorized');
+  error.status = 401;
+  next(error);
+};
+
+app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    if(!req.cookies.authorization || req.cookies.authorization === 'deleted'){
+      const error = new Error('not authorized');
+      error.status = 401;
+      throw error;
+    }
+    res.send(await Course.findAll());
+  }
+  catch(ex){
+    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
+    next(ex);
+  }
+});
+
+app.get('/auth', isLoggedIn, async(req, res, next)=> {
+  try {
+    res.send(await req.user);
+  }
+  catch(ex){
     next(ex);
   }
 });
