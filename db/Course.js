@@ -1,7 +1,9 @@
 const conn = require('./conn');
 const { STRING } = conn.Sequelize;
+const { id } = require('./common');
 
 const Course = conn.define('course', {
+  id,
   title: {
     type: STRING,
     unique: true,
@@ -9,7 +11,7 @@ const Course = conn.define('course', {
     validate: {
       notEmpty: true
     }
-  }
+  },
 });
 
 module.exports = Course;

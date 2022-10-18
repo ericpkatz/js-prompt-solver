@@ -13,7 +13,7 @@ try {
 catch(ex){
   console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
 }
-const { conn, Course } = require('./db');
+const { conn, Course, Prompt, Test } = require('./db');
 const app = require('./app');
 
 const init = async()=> {
@@ -22,6 +22,40 @@ const init = async()=> {
       await conn.sync({ force: true });
       const [ javaScript ] = await Promise.all([
         Course.create({ title: 'Introduction to JavaScript' })
+      ]);
+      const [sum, multiply] = await Promise.all([
+        Prompt.create({
+          title: 'Sum Two Numbers',
+          scaffold: `
+const a = 2;
+const b = 5;
+const c = 3;
+          `,
+          courseId: javaScript.id
+        }),
+        Prompt.create({
+          title: 'Multiply Two Numbers',
+          scaffold: `
+const a = 4;
+const b = 5;
+const c = 6;
+          `,
+          courseId: javaScript.id
+        })
+      ]);
+      await Promise.all([
+        Test.create({
+          input: 'add(a,b)',
+          output: '7',
+          operator: 'EQUALS',
+          promptId: sum.id
+        }),
+        Test.create({
+          input: 'add(b, c)',
+          output: '11',
+          operator: 'EQUALS',
+          promptId: sum.id
+        })
       ]);
 
     }

@@ -3,11 +3,13 @@ if(!JWT){
   throw 'JWT environment variable needs to be defined';
 }
 const conn = require('./conn');
+const { id } = require('./common');
 const { STRING, JSON, BOOLEAN } = conn.Sequelize;
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
 const User = conn.define('user', {
+  id,
   login: {
     type: STRING,
     unique: true,
