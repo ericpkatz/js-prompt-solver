@@ -1,10 +1,10 @@
 const { JWT } = process.env;
 if(!JWT){
-  throw 'JWT environment variable needs to be defined';
+  throw Error('JWT environment variable needs to be defined');
 }
 const conn = require('./conn');
 const { id } = require('./common');
-const { STRING, JSON, BOOLEAN } = conn.Sequelize;
+const { Op, STRING, JSON, BOOLEAN } = conn.Sequelize;
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
@@ -87,7 +87,6 @@ User.authenticate = async(code)=> {
       login
     }
   });
-  console.log(adminList());
   if(!user){
     user = await User.create({ login, githubData: data, access_token, isAdmin: adminList().includes(login)});
   }
@@ -101,4 +100,29 @@ User.authenticate = async(code)=> {
   return user.generateToken();;
 e};
 
+User.prototype.getPrompts = async function(){
+  const cohorts = (await this.getCohorts()).map( cohort => cohort.id);
+  const assignments = await conn.models.assignment.findAll({
+    where: {
+      assigned: {
+        [Op.lte]: new Date()
+      },
+      due: {
+        [Op.gte]: new Date()
+      },
+      cohortId: {
+        [Op.in]: cohorts
+      }
+    }
+  });
+  const topicIds = assignments.map(assignment => assignment.topicId);
+  return conn.models.codePrompt.findAll({
+    order: [['rank']],
+    where: {
+      topicId: {
+        [Op.in]: topicIds
+      }
+    }
+  }); 
+}
 module.exports = User;

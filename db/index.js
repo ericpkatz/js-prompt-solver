@@ -1,24 +1,37 @@
 const conn = require('./conn');
 const User = require('./User');
 const Course = require('./Course');
-const Prompt = require('./Prompt');
-const Test = require('./Test');
+const CodePrompt = require('./CodePrompt');
+const Topic = require('./Topic');
+const Enrollment = require('./Enrollment');
+const Assignment = require('./Assignment');
+const Cohort = require('./Cohort');
 
-Prompt.belongsTo(Course);
-Course.hasMany(Prompt);
-Test.belongsTo(Prompt);
+User.belongsToMany(Cohort, { through: Enrollment });
+Cohort.belongsToMany(User, { through: Enrollment });
 
-Prompt.belongsTo(User, { as: 'createdBy' });
-Prompt.belongsTo(User, { as: 'editedBy' });
-Course.belongsTo(User, { as: 'createdBy' });
-Course.belongsTo(User, { as: 'editedBy' });
-Test.belongsTo(User, { as: 'createdBy' });
-Test.belongsTo(User, { as: 'editedBy' });
+Cohort.belongsTo(Course);
+Course.hasMany(Cohort);
+
+Topic.belongsTo(Course);
+Course.hasMany(Topic);
+
+Assignment.belongsTo(Topic);
+Assignment.belongsTo(Cohort);
+
+Cohort.hasMany(Assignment);
+Topic.hasMany(Assignment);
+
+CodePrompt.belongsTo(Topic);
+Topic.hasMany(CodePrompt);
 
 module.exports = {
   conn,
   User,
   Course,
-  Prompt,
-  Test
+  CodePrompt,
+  Topic,
+  Enrollment,
+  Assignment,
+  Cohort
 };

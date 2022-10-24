@@ -22,6 +22,10 @@ const Test = conn.define('test', {
     type: ENUM('EQUALS', 'NEQUALS', 'EQLS'),
     allowNull: false,
   },
+  outputDataType: {
+    type: ENUM('NUMERIC', 'STRING'),
+    allowNull: false,
+  },
   promptId: {
     type: UUID,
     allowNull: false

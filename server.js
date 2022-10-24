@@ -48,13 +48,29 @@ const c = 6;
           input: 'add(a,b)',
           output: '7',
           operator: 'EQUALS',
-          promptId: sum.id
+          promptId: sum.id,
+          outputDataType: 'NUMERIC'
         }),
         Test.create({
           input: 'add(b, c)',
           output: '11',
           operator: 'EQUALS',
-          promptId: sum.id
+          promptId: sum.id,
+          outputDataType: 'NUMERIC'
+        }),
+        Test.create({
+          input: 'multiply(a,b)',
+          output: '20',
+          operator: 'EQUALS',
+          promptId: multiply.id,
+          outputDataType: 'NUMERIC'
+        }),
+        Test.create({
+          input: 'multiply(b, c)',
+          output: '30',
+          operator: 'EQUALS',
+          promptId: multiply.id,
+          outputDataType: 'NUMERIC'
         })
       ]);
 

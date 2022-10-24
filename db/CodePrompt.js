@@ -1,8 +1,8 @@
 const conn = require('./conn');
-const { STRING, TEXT, UUID } = conn.Sequelize;
+const { INTEGER, STRING, TEXT, UUID } = conn.Sequelize;
 const { id } = require('./common');
 
-const Prompt = conn.define('prompt', {
+const CodePrompt = conn.define('codePrompt', {
   id,
   title: {
     type: STRING,
@@ -15,10 +15,14 @@ const Prompt = conn.define('prompt', {
   scaffold: {
     type: TEXT
   },
-  courseId: {
+  topicId: {
     type: UUID,
     allowNull: false
+  },
+  rank: {
+    type: INTEGER,
+    defaultValue: 5
   }
 });
 
-module.exports = Prompt;
+module.exports = CodePrompt;
