@@ -20,6 +20,8 @@ const init = async()=> {
   try {
     if(process.env.SYNC){
       await conn.sync({ force: true });
+    }
+      /*
       const [ javaScript ] = await Promise.all([
         Course.create({ title: 'Introduction to JavaScript' })
       ]);
@@ -73,8 +75,8 @@ const c = 6;
           outputDataType: 'NUMERIC'
         })
       ]);
-
     }
+    */
     const port = process.env.PORT || 3000;
     app.listen(port, ()=> console.log(`listening on port ${port}`));
   }
