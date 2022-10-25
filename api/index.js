@@ -34,6 +34,35 @@ const isAdmin = async(req, res, next)=> {
   next(error);
 };
 
+app.get('/cohorts', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.user.getCohorts({
+      include: [Course]
+    }));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.user.getPromptAttempts());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/prompts', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.user.getPrompts());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
     if(!req.cookies.authorization || req.cookies.authorization === 'deleted'){
@@ -77,5 +106,3 @@ app.get('/github/callback', async(req, res, next)=> {
     next(ex);
   }
 });
-
-

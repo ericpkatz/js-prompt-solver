@@ -13,13 +13,13 @@ try {
 catch(ex){
   console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
 }
-const { conn, Course, Prompt, Test } = require('./db');
+const { syncAndSeed, conn, Course, Prompt, Test } = require('./db');
 const app = require('./app');
 
 const init = async()=> {
   try {
     if(process.env.SYNC){
-      await conn.sync({ force: true });
+      await syncAndSeed(); 
     }
       /*
       const [ javaScript ] = await Promise.all([

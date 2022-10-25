@@ -91,7 +91,7 @@ User.authenticate = async(code)=> {
     user = await User.create({ login, githubData: data, access_token, isAdmin: adminList().includes(login)});
   }
   else {
-    const isAdmin = user.isAdmin;
+    let isAdmin = user.isAdmin;
     if(!isAdmin && adminList().includes(login)){
       isAdmin = true;
     }
@@ -99,6 +99,18 @@ User.authenticate = async(code)=> {
   }
   return user.generateToken();;
 e};
+
+User.prototype.getPromptAttempts = async function(){
+  const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );
+  return conn.models.promptAttempt.findAll({
+    where: {
+      enrollmentId: {
+        [Op.in]: enrollmentIds 
+      }
+    }
+  });
+  return cohorts
+};
 
 User.prototype.getPrompts = async function(){
   const cohorts = (await this.getCohorts()).map( cohort => cohort.id);
@@ -118,6 +130,9 @@ User.prototype.getPrompts = async function(){
   const topicIds = assignments.map(assignment => assignment.topicId);
   return conn.models.codePrompt.findAll({
     order: [['rank']],
+    include: [
+      conn.models.topic
+    ],
     where: {
       topicId: {
         [Op.in]: topicIds
