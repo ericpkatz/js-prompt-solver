@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { savePromptAttempt } from '../store';
 import { useDispatch } from 'react-redux';
 
-const PromptAttempt = ({ promptAttempt, enrollmentId, assignmentId, codePromptId })=> {
+const PromptAttempt = ({ promptAttempt })=> {
   const [el, setEl] = useState(null);
   const [editor, setEditor] = useState(null);
   const dispatch = useDispatch();
@@ -21,19 +21,17 @@ const PromptAttempt = ({ promptAttempt, enrollmentId, assignmentId, codePromptId
   const save = ev => {
     ev.preventDefault();
     console.log('we have the prompt? Can we assume the enrollment? Prompt, to topic. Is the topic currently assigned to an enrollment the cohort is in?');
-    console.log(enrollmentId, assignmentId, codePromptId);
-    //dispatch(savePromptAttempt(editor.getValue()));
+    promptAttempt = {...promptAttempt, attempt: editor.getValue() };
+    dispatch(savePromptAttempt(editor.getValue()));
   }
   return (
     <div>
       <form onSubmit={ save }>
-        <textarea value={ attempt } onChange={ ev => setAttempt(ev.target.value)}>
-          {
-            attempt
-          }
-        </textarea>
         <div ref={el => setEl(el)}></div>
-        <button>Save</button>
+        <div>
+          <button>Run</button>
+          <button disabled={ !promptAttempt.id }>Submit</button>
+        </div>
       </form>
     </div>
   );

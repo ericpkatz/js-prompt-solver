@@ -92,5 +92,6 @@ module.exports = {
   Enrollment,
   Assignment,
   Cohort,
+  PromptAttempt,
   syncAndSeed
 };

@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { User, Course } = require('../db');
+const { User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -72,23 +72,27 @@ app.post('/codePrompts', isLoggedIn, async(req, res, next)=> {
   }
 });
 
-app.put('/promptAttempts', isLoggedIn, async(req, res, next)=> {
+app.post('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   try{
-    res.send(await req.body);
+    //TODO - make sure the user is the one who owns the enrollment
+    const promptAttempt = await req.user.attemptPrompt(req.body);
+    res.send(promptAttempt);
   }
   catch(ex){
     next(ex);
   }
 });
 
+/*
 app.get('/prompts', isLoggedIn, async(req, res, next)=> {
   try{
-    res.send(await req.user.getPrompts());
+    res.send(await req.user.attemptPrompt(req.body));
   }
   catch(ex){
     next(ex);
   }
 });
+*/
 
 app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {

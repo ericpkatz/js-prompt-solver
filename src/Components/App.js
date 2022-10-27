@@ -53,7 +53,12 @@ const App = ()=> {
       <ul>
       {
         cohorts.map( cohort => {
-          const filteredAssignments = assignments.filter(assignment => assignment.cohortId === cohort.id);
+          const filteredAssignments = assignments
+            .filter(assignment => assignment.cohortId === cohort.id)
+            .filter(({ due, assigned }) => {
+              const now = new Date();
+              return now > new Date(assigned) && now < new Date(due); 
+            });
           return (
             <li key={ cohort.id}>
             { cohort.id } { cohort.name } { cohort.course.title }
@@ -63,14 +68,21 @@ const App = ()=> {
                     return (
                       <li key={ assignment.id }>
                         { assignment.topic.title }
+                        ({ new Date(assignment.assigned).toLocaleDateString() })-({ new Date(assignment.due).toLocaleDateString() })
                         <ul>
                           {
-                            assignment.topic.codePrompts.map( codePrompt => {
-                              const promptAttempt = promptAttempts.find( promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {};
+                            assignment.topic.codePrompts.sort((a, b)=> a.rank*1 - b.rank*1).map( codePrompt => {
+                              const promptAttempt = promptAttempts.find( promptAttempt => promptAttempt.codePromptId === codePrompt.id) || { assignmentId: assignment.id, enrollmentId: cohort.enrollment.id, codePromptId: codePrompt.id };
                               return (
                                 <li key={ codePrompt.id }>
-                                  { codePrompt.title }
-                                  <PromptAttempt promptAttempt={ promptAttempt } assignmentId={ assignment.id } enrollmentId={ cohort.enrollment.id } codePromptId={ codePrompt.id }/>
+                                  { codePrompt.title } ({ codePrompt.rank })
+                                  <br />
+                                  {
+                                    !!promptAttempt.id ? 'ATTEMPTED' : 'NOT ATTEMPTED'
+                                  }
+                                  <br />
+                                  { !!promptAttempt.submitted ? 'SUBMITTED' : 'NOT SUBMITTED'}
+                                  <PromptAttempt promptAttempt={ promptAttempt }/>
                                 </li>
                               );
                             })

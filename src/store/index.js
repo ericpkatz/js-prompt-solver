@@ -25,14 +25,11 @@ export const fetchCourses = ()=> {
 
 export const savePromptAttempt = (promptAttempt)=> {
   return async(dispatch)=> {
-    console.log(promptAttempt);
-    /*
     const response = await axios('/api/promptAttempts', {
-      method: 'get',
+      method: 'post',
       withCredentials: true
     });
-    dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
-    */
+    //dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
   };
 };
 

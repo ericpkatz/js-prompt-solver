@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const { INTEGER, STRING, TEXT, UUID } = conn.Sequelize;
+const { INTEGER, STRING, TEXT, UUID, BOOLEAN } = conn.Sequelize;
 const { id } = require('./common');
 
 const PromptAttempt = conn.define('promptAttempt', {
@@ -19,6 +19,11 @@ const PromptAttempt = conn.define('promptAttempt', {
     type: UUID,
     allowNull: false
   },
+  submitted: {
+    type: BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  }
 });
 
 PromptAttempt.addHook('beforeSave', async(promptAttempt)=> {
