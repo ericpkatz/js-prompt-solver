@@ -54,6 +54,24 @@ app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.post('/codePrompts', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.body);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.put('/promptAttempts', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.body);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/prompts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getPrompts());

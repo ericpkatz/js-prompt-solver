@@ -33,6 +33,19 @@ export const fetchPrompts = ()=> {
   };
 };
 
+export const savePromptAttempt = (promptAttempt)=> {
+  return async(dispatch)=> {
+    console.log(promptAttempt);
+    /*
+    const response = await axios('/api/promptAttempts', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
+    */
+  };
+};
+
 export const fetchPromptAttempts = ()=> {
   return async(dispatch)=> {
     const response = await axios('/api/promptAttempts', {

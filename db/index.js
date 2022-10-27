@@ -26,8 +26,13 @@ Topic.hasMany(Assignment);
 CodePrompt.belongsTo(Topic);
 Topic.hasMany(CodePrompt);
 
-Enrollment.belongsToMany(CodePrompt, { through: PromptAttempt });
-CodePrompt.belongsToMany(Enrollment, { through: PromptAttempt });
+PromptAttempt.belongsTo(Enrollment);
+PromptAttempt.belongsTo(Assignment);
+PromptAttempt.belongsTo(CodePrompt);
+
+Enrollment.hasMany(PromptAttempt);
+Assignment.hasMany(PromptAttempt);
+CodePrompt.hasMany(PromptAttempt);
 
 const syncAndSeed = async()=> {
     await conn.sync({ force: true });
@@ -43,7 +48,7 @@ const syncAndSeed = async()=> {
     
     const [ enrollment ] = await user.addCohort(cohort);
     const topic = await Topic.create({ title: 'JavaScript Generating Arrays'});
-    await Assignment.create({ topicId: topic.id, cohortId: cohort.id});
+    const assignment1 = await Assignment.create({ topicId: topic.id, cohortId: cohort.id});
     const codePrompt2 = await CodePrompt.create({
       topicId: topic.id,
       title: 'Generate An Array of n numbers',
@@ -56,7 +61,7 @@ const syncAndSeed = async()=> {
     });
     const topic2 = await Topic.create({ title: 'JavaScript Generating Arrays from Other Arrays'});
     const ONE_DAY = 1000 * 60 * 60 * 24;
-    await Assignment.create({ topicId: topic2.id, cohortId: cohort.id, assigned: new Date().getTime() + ONE_DAY});
+    const assignment2 = await Assignment.create({ topicId: topic2.id, cohortId: cohort.id, assigned: new Date().getTime() + ONE_DAY});
     const codePrompt3 = await CodePrompt.create({
       topicId: topic2.id,
       title: 'Generate An Array which doubles the values of an existing array'
@@ -68,7 +73,7 @@ const syncAndSeed = async()=> {
     });
   await PromptAttempt.create({ enrollmentId: enrollment.id, codePromptId: codePrompt1.id, attempt: `
   console.log('fizz bar bazz');
-  `});
+  `, assignmentId: assignment1.id});
   return { course, user, cohort };
 };
 
