@@ -22,7 +22,15 @@ const PromptAttempt = conn.define('promptAttempt', {
 });
 
 PromptAttempt.addHook('beforeSave', async(promptAttempt)=> {
-  console.log(promptAttempt.get());
+  if(promptAttempt.isNewRecord && !!(await PromptAttempt.findOne({
+    where: {
+      assignmentId: promptAttempt.assignmentId,
+      codePromptId: promptAttempt.codePromptId,
+      enrollmentId: promptAttempt.enrollmentId,
+    }
+  }))){
+    throw Error('This promptAttempt exists for this enrollment, codePromptId, and assignment');
+  }
   const [assignment, enrollment, codePrompt] = await Promise.all([
     conn.models.assignment.findByPk(promptAttempt.assignmentId),
     conn.models.enrollment.findByPk(promptAttempt.enrollmentId),

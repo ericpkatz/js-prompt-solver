@@ -74,6 +74,12 @@ const syncAndSeed = async()=> {
   await PromptAttempt.create({ enrollmentId: enrollment.id, codePromptId: codePrompt1.id, attempt: `
   console.log('fizz bar bazz');
   `, assignmentId: assignment1.id});
+    const topic3 = await Topic.create({ title: 'foo bar bazz'});
+    const assignment3 = await Assignment.create({ topicId: topic3.id, cohortId: cohort2.id, assigned: new Date().getTime() + ONE_DAY});
+    const codePrompt5 = await CodePrompt.create({
+      topicId: topic3.id,
+      title: 'whatever dude'
+    });
   return { course, user, cohort };
 };
 

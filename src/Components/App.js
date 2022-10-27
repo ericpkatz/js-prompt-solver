@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPrompts, fetchPromptAttempts } from '../store';
+import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments } from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 
 const App = ()=> {
-  const { promptAttempts, codePrompts, auth, cohorts } = useSelector(state => state);
+  const { promptAttempts, codePrompts, auth, cohorts, assignments } = useSelector(state => state);
+  console.log(assignments);
   const isAdmin = auth.isAdmin;
   const dispatch = useDispatch();
   const _logout = ()=> {
@@ -23,8 +24,8 @@ const App = ()=> {
     }
     if(auth.id){
       dispatch(fetchCohorts());
-      dispatch(fetchPrompts());
       dispatch(fetchPromptAttempts());
+      dispatch(fetchAssignments());
     }
   }, [auth]);
 
@@ -52,31 +53,38 @@ const App = ()=> {
       <ul>
       {
         cohorts.map( cohort => {
+          const filteredAssignments = assignments.filter(assignment => assignment.cohortId === cohort.id);
           return (
             <li key={ cohort.id}>
-              { cohort.name } { cohort.course.title }
+            { cohort.id } { cohort.name } { cohort.course.title }
+              <ul>
+                {
+                  filteredAssignments.map( assignment => {
+                    return (
+                      <li key={ assignment.id }>
+                        { assignment.topic.title }
+                        <ul>
+                          {
+                            assignment.topic.codePrompts.map( codePrompt => {
+                              const promptAttempt = promptAttempts.find( promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {};
+                              return (
+                                <li key={ codePrompt.id }>
+                                  { codePrompt.title }
+                                  <PromptAttempt promptAttempt={ promptAttempt } assignmentId={ assignment.id } enrollmentId={ cohort.enrollment.id } codePromptId={ codePrompt.id }/>
+                                </li>
+                              );
+                            })
+                          }
+                        </ul>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
             </li>
           );
         })
       }
-      </ul>
-      <ul>
-        {
-          codePrompts.map(codePrompt => {
-            const promptAttempt = promptAttempts.find( promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {};
-            return (
-              <li key={ codePrompt.id }>
-                { codePrompt.title }
-                <div>
-                  {
-                    promptAttempt.attempt
-                  }
-                  <PromptAttempt promptAttempt={ promptAttempt }/>
-                </div>
-              </li>
-            );
-          })
-        }
       </ul>
       <Routes>
         <Route path='/admin' element={ <AdminDashboard /> } />

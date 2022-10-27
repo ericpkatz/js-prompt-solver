@@ -112,6 +112,30 @@ User.prototype.getPromptAttempts = async function(){
   return cohorts
 };
 
+User.prototype.getAssignments = async function(){
+  return conn.models.assignment.findAll({
+    include: [
+      {
+        model: conn.models.topic,
+        include: [
+          conn.models.codePrompt
+        ]
+      },
+      {
+        model: conn.models.cohort,
+        include: [
+          {
+            model: conn.models.user,
+            where: {
+              id: this.id
+            }
+          }
+        ]
+      }
+    ]
+  });
+};
+
 User.prototype.getPrompts = async function(){
   const cohorts = (await this.getCohorts()).map( cohort => cohort.id);
   const assignments = await conn.models.assignment.findAll({

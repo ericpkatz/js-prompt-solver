@@ -23,16 +23,6 @@ export const fetchCourses = ()=> {
   };
 };
 
-export const fetchPrompts = ()=> {
-  return async(dispatch)=> {
-    const response = await axios('/api/prompts', {
-      method: 'get',
-      withCredentials: true
-    });
-    dispatch({ type: 'SET_PROMPTS', prompts: response.data });
-  };
-};
-
 export const savePromptAttempt = (promptAttempt)=> {
   return async(dispatch)=> {
     console.log(promptAttempt);
@@ -43,6 +33,16 @@ export const savePromptAttempt = (promptAttempt)=> {
     });
     dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
     */
+  };
+};
+
+export const fetchAssignments = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/assignments', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_ASSIGNMENTS', assignments: response.data });
   };
 };
 
@@ -111,6 +111,13 @@ const cohorts = (state = [], action)=> {
   return state;
 };
 
+const assignments = (state = [], action)=> {
+  if(action.type === 'SET_ASSIGNMENTS'){
+    return action.assignments;
+  }
+  return state;
+};
+
 const admin = combineReducers({
   courses
 });
@@ -119,8 +126,8 @@ const reducer = combineReducers({
   auth,
   admin,
   cohorts,
-  codePrompts: prompts,
-  promptAttempts
+  promptAttempts,
+  assignments
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));

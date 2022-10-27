@@ -34,6 +34,15 @@ const isAdmin = async(req, res, next)=> {
   next(error);
 };
 
+app.get('/assignments', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.user.getAssignments());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/cohorts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getCohorts({
