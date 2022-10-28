@@ -55,6 +55,21 @@ User.byToken = async(token)=> {
 };
 
 
+User.prototype.attemptPrompt = async function(promptAttempt){
+  if(await !this.isYourEnrollment(promptAttempt.enrollmentId)){
+    throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${promptAttempt.enrollmentId}`);
+  }
+  //TODO - make sure it is your enrollment!
+  if(!promptAttempt.id){
+    return conn.models.promptAttempt.create(promptAttempt);
+  }
+  else {
+    const _promptAttempt = await conn.models.promptAttempt.findByPk(promptAttempt.id);
+    _promptAttempt.update(promptAttempt);
+    return _promptAttempt;
+  }
+}
+
 User.authenticate = async(code)=> {
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
   let response = await axios.post('https://github.com/login/oauth/access_token', {
@@ -99,6 +114,15 @@ User.authenticate = async(code)=> {
   }
   return user.generateToken();;
 e};
+
+User.prototype.isYourEnrollment = function(enrollmentId){
+  return !!conn.models.enrollment.findOne({
+    where: {
+      userId: this.id,
+      enrollmentId
+    }
+  });
+}
 
 User.prototype.getPromptAttempts = async function(){
   const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );

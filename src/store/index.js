@@ -27,7 +27,8 @@ export const savePromptAttempt = (promptAttempt)=> {
   return async(dispatch)=> {
     const response = await axios('/api/promptAttempts', {
       method: 'post',
-      withCredentials: true
+      withCredentials: true,
+      data: promptAttempt
     });
     //dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
   };

@@ -18,19 +18,21 @@ const PromptAttempt = ({ promptAttempt })=> {
     }
   }, [el]);
   const [attempt, setAttempt] = useState(promptAttempt.attempt || '');
+
   const save = ev => {
     ev.preventDefault();
     console.log('we have the prompt? Can we assume the enrollment? Prompt, to topic. Is the topic currently assigned to an enrollment the cohort is in?');
-    promptAttempt = {...promptAttempt, attempt: editor.getValue() };
-    dispatch(savePromptAttempt(editor.getValue()));
+    promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
+    dispatch(savePromptAttempt(promptAttempt));
   }
+
   return (
     <div>
       <form onSubmit={ save }>
         <div ref={el => setEl(el)}></div>
         <div>
-          <button>Run</button>
-          <button disabled={ !promptAttempt.id }>Submit</button>
+          <button id='run'>Run</button>
+          <button id='submit' disabled={ !promptAttempt.id }>Submit</button>
         </div>
       </form>
     </div>
