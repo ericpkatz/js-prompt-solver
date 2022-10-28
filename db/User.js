@@ -1,7 +1,4 @@
 const { JWT } = process.env;
-if(!JWT){
-  throw Error('JWT environment variable needs to be defined');
-}
 const conn = require('./conn');
 const { id } = require('./common');
 const { Op, STRING, JSON, BOOLEAN } = conn.Sequelize;

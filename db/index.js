@@ -7,6 +7,7 @@ const Enrollment = require('./Enrollment');
 const Assignment = require('./Assignment');
 const Cohort = require('./Cohort');
 const PromptAttempt = require('./PromptAttempt');
+const Feedback = require('./Feedback');
 
 User.belongsToMany(Cohort, { through: Enrollment });
 Cohort.belongsToMany(User, { through: Enrollment });
@@ -34,11 +35,18 @@ Enrollment.hasMany(PromptAttempt);
 Assignment.hasMany(PromptAttempt);
 CodePrompt.hasMany(PromptAttempt);
 
+Feedback.belongsTo(PromptAttempt);
+Feedback.belongsTo(Enrollment);
+
 const syncAndSeed = async()=> {
     await conn.sync({ force: true });
     const [user, course, user2] = await Promise.all([
       User.create({ login: 'prof-katz'}),
-      Course.create({ title: 'JavaScript'}),
+      Course.create({ title: 'JavaScript', description: `
+Welcome to JavaScript!
+
+These code prompts will guide you through some important JavaScript concepts.
+      `}),
       User.create({ login: 'ericpkatz'})
     ]);
     const cohort = await Cohort.create({ name: 'A_COHORT', courseId: course.id});

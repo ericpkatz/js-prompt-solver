@@ -30,7 +30,16 @@ export const savePromptAttempt = (promptAttempt)=> {
       withCredentials: true,
       data: promptAttempt
     });
-    //dispatch({ type: 'SET_PROMPT_ATTEMPTS', promptAttempts: response.data });
+    dispatch(fetchPromptAttempts());
+  };
+};
+
+export const clear = (navigate)=> {
+  return (dispatch)=> {
+    dispatch({ type: 'SET_ASSIGNMENTS', assignments: [] });
+    dispatch({ type: 'SET_COHORTS', cohorts: [] });
+    dispatch({ type: 'SET_COHORTS', cohorts: [] });
+    navigate('/');
   };
 };
 

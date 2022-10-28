@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const { STRING } = conn.Sequelize;
+const { STRING, TEXT } = conn.Sequelize;
 const { id } = require('./common');
 
 const Course = conn.define('course', {
@@ -11,6 +11,9 @@ const Course = conn.define('course', {
     validate: {
       notEmpty: true
     }
+  },
+  description: {
+    type: TEXT,
   },
 });
 

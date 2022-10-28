@@ -1,3 +1,6 @@
+if(!process.env.JWT){
+  throw Error('JWT environment variable needs to be defined');
+}
 try {
   require('./secrets');
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
@@ -10,6 +13,7 @@ try {
   }
   throw Error('configure github for authentication');
 }
+
 catch(ex){
   console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
 }
@@ -18,9 +22,10 @@ const app = require('./app');
 
 const init = async()=> {
   try {
-    if(process.env.SYNC){
+    if(process.env.SYNC === 'true'){
       await syncAndSeed(); 
     }
+
       /*
       const [ javaScript ] = await Promise.all([
         Course.create({ title: 'Introduction to JavaScript' })
