@@ -38,3 +38,19 @@ section#welcome {
   justify-content: space-between;
 }
 
+#ide {
+  display: flex;
+}
+
+#ide > *{
+  flex: 1;
+  border: solid 1px gray;
+}
+
+.CodeMirror {
+  font-size: 1.2rem;
+}
+
+.console {
+  background-color: #eee;
+}
