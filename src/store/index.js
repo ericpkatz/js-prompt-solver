@@ -34,6 +34,17 @@ export const savePromptAttempt = (promptAttempt)=> {
   };
 };
 
+export const createFeedback = (feedback)=> {
+  return async(dispatch)=> {
+    const response = await axios(`/api/feedbacks/${feedback.id}`, {
+      method: 'put',
+      withCredentials: true,
+      data: feedback 
+    });
+    dispatch(fetchFeedbacks());
+  };
+};
+
 export const clear = (navigate)=> {
   return (dispatch)=> {
     dispatch({ type: 'SET_ASSIGNMENTS', assignments: [] });
@@ -70,6 +81,16 @@ export const fetchCohorts = ()=> {
       withCredentials: true
     });
     dispatch({ type: 'SET_COHORTS', cohorts: response.data });
+  };
+};
+
+export const fetchFeedbacks = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/feedbacks', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_FEEDBACKS', feedbacks: response.data });
   };
 };
 
@@ -118,6 +139,13 @@ const cohorts = (state = [], action)=> {
   return state;
 };
 
+const feedbacks = (state = [], action)=> {
+  if(action.type === 'SET_FEEDBACKS'){
+    return action.feedbacks;
+  }
+  return state;
+};
+
 const assignments = (state = [], action)=> {
   if(action.type === 'SET_ASSIGNMENTS'){
     return action.assignments;
@@ -134,7 +162,8 @@ const reducer = combineReducers({
   admin,
   cohorts,
   promptAttempts,
-  assignments
+  assignments,
+  feedbacks
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));

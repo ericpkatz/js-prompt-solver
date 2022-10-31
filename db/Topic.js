@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const { STRING } = conn.Sequelize;
+const { STRING, UUID } = conn.Sequelize;
 const { id } = require('./common');
 
 const Topic = conn.define('topic', {
@@ -12,6 +12,10 @@ const Topic = conn.define('topic', {
       notEmpty: true
     }
   },
+  courseId: {
+    type: UUID,
+    allowNull: false
+  }
 });
 
 module.exports = Topic;

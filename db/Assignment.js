@@ -28,4 +28,14 @@ const Assignment = conn.define('assignment', {
   }
 });
 
+Assignment.addHook('beforeSave', async(assignment)=> {
+  const [cohort, topic] = await Promise.all([
+    conn.models.cohort.findByPk(assignment.cohortId),
+    conn.models.topic.findByPk(assignment.topicId)
+  ]);
+  if(cohort.courseId !== topic.courseId){
+    throw `Cohort course is ${course.id} and Topic course is ${topic.courseId}`;
+  }
+});
+
 module.exports = Assignment;

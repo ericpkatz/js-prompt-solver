@@ -22,6 +22,7 @@ const Cohort = ()=> {
   return (
             <div key={ cohort.id}>
               <h2>{ cohort.name } { cohort.course.title }</h2>
+              <Link to={`/cohorts/${cohort.id}/feedback`}>Feedback</Link>
               <div>
                 {
                   filteredAssignments.map( assignment => {
@@ -39,14 +40,10 @@ const Cohort = ()=> {
                               shown = true;
                               return (
                                 <li key={ codePrompt.id }>
-                                  { codePrompt.title } ({ codePrompt.rank })
+                                  <pre>
+                                  { codePrompt.title }
+                                  </pre>
                                   ({ idx + 1} of { assignment.topic.codePrompts.length})
-                                  <br />
-                                  {
-                                    !!promptAttempt.id ? `ATTEMPTED (${ new Date(promptAttempt.updatedAt).toLocaleString()})` : 'NOT ATTEMPTED'
-                                  }
-                                  <br />
-                                  { !!promptAttempt.submitted ? 'SUBMITTED' : 'NOT SUBMITTED'}
                                   <PromptAttempt promptAttempt={ promptAttempt }/>
                                 </li>
                               );

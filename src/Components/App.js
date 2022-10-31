@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments } from '../store';
+import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments, fetchFeedbacks} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 import Cohort from './Cohort';
 import Home from './Home';
+import Feedback from './Feedback';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -38,6 +39,7 @@ const App = ()=> {
       dispatch(fetchCohorts());
       dispatch(fetchPromptAttempts());
       dispatch(fetchAssignments());
+      dispatch(fetchFeedbacks());
     }
     if(prev && prev.id && !auth.id){
       dispatch(clear(navigate));
@@ -46,15 +48,19 @@ const App = ()=> {
 
   return (
     <div>
-      <nav>
-        <Link to='/'>Home</Link>
-        {
-          auth.isAdmin && <Link to='/admin'>Admin</Link>
-        }
-      </nav>
+      {
+        !!auth.id && (
+          <nav>
+            <Link to='/'>Home</Link>
+            {
+              auth.isAdmin && <Link to='/admin'>Admin</Link>
+            }
+          </nav>
+        )
+      }
       <main>
         <section id='welcome'>
-          <h1>Welcome to Prompt Solver</h1>
+          <h1>Welcome to JS Prompt Solver</h1>
           {
             !!auth.id && (
               <div>
@@ -74,6 +80,7 @@ const App = ()=> {
           <Route path='/' element={ <Home /> } />
           <Route path='/admin' element={ <AdminDashboard /> } />
           <Route path='/cohorts/:id' element={ <Cohort /> } />
+          <Route path='/cohorts/:id/feedback' element={ <Feedback /> } />
         </Routes>
       </main>
     </div>

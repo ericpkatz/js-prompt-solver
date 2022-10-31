@@ -43,6 +43,15 @@ app.get('/assignments', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
+  try{
+    res.send(await req.user.getFeedbacks());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/cohorts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getCohorts({
@@ -63,20 +72,24 @@ app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   }
 });
 
-app.post('/codePrompts', isLoggedIn, async(req, res, next)=> {
+app.post('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   try{
-    res.send(await req.body);
+    //TODO - make sure the user is the one who owns the enrollment
+    //look at req.user's enrollments!
+    const promptAttempt = await req.user.attemptPrompt(req.body);
+    res.send(promptAttempt);
   }
   catch(ex){
     next(ex);
   }
 });
 
-app.post('/promptAttempts', isLoggedIn, async(req, res, next)=> {
+app.put('/feedbacks/:id', isLoggedIn, async(req, res, next)=> {
   try{
     //TODO - make sure the user is the one who owns the enrollment
-    const promptAttempt = await req.user.attemptPrompt(req.body);
-    res.send(promptAttempt);
+    //look at req.user's enrollments!
+    const feedback = await req.user.updateFeedback(req.body);
+    res.send(feedback);
   }
   catch(ex){
     next(ex);

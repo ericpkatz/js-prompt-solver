@@ -51,6 +51,14 @@ User.byToken = async(token)=> {
   return user;
 };
 
+User.prototype.updateFeedback = async function(feedback){
+  if(await !this.isYourEnrollment(feedback.enrollmentId)){
+    throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${feedback.enrollmentId}`);
+  }
+  const comments = feedback.comments;
+  feedback = await conn.models.feedback.findByPk(feedback.id);
+  return await feedback.update({ comments });
+}
 
 User.prototype.attemptPrompt = async function(promptAttempt){
   if(await !this.isYourEnrollment(promptAttempt.enrollmentId)){
@@ -124,6 +132,10 @@ User.prototype.isYourEnrollment = function(enrollmentId){
 User.prototype.getPromptAttempts = async function(){
   const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );
   return conn.models.promptAttempt.findAll({
+    include: [
+      conn.models.codePrompt,
+      conn.models.feedback,
+    ],
     where: {
       enrollmentId: {
         [Op.in]: enrollmentIds 
@@ -131,6 +143,22 @@ User.prototype.getPromptAttempts = async function(){
     }
   });
   return cohorts
+};
+
+User.prototype.getFeedbacks = async function(){
+  const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );
+  return conn.models.feedback.findAll({
+    include: [
+      {
+        model: conn.models.promptAttempt
+      }
+    ],
+    where: {
+      enrollmentId: {
+        [Op.in]: enrollmentIds 
+      }
+    }
+  });
 };
 
 User.prototype.getAssignments = async function(){

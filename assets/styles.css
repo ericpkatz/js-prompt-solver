@@ -54,3 +54,32 @@ section#welcome {
 .console {
   background-color: #eee;
 }
+
+.review {
+  display: flex;
+}
+.review > * {
+  flex: 1;
+}
+.review-container {
+  border: solid 1px gray;
+}
+
+.comments {
+  height: 100px;
+}
+#feedback-grid {
+  display: flex;
+}
+#feedback-grid > *{
+  padding: 0.5rem;
+  flex: 1;
+  border-left: solid 3px grey;
+}
+
+#feedback-grid > div:nth-child(2){
+  background-color: #eee;
+}
+#feedback-grid h3 {
+  text-align: center;
+}
