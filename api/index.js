@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { User, Course, PromptAttempt } = require('../db');
+const { Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -107,14 +107,42 @@ app.get('/prompts', isLoggedIn, async(req, res, next)=> {
 });
 */
 
+app.get('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await User.findAll());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
-    if(!req.cookies.authorization || req.cookies.authorization === 'deleted'){
-      const error = new Error('not authorized');
-      error.status = 401;
-      throw error;
-    }
-    res.send(await Course.findAll());
+    res.send(await Course.findAll({
+      include: [
+        {
+          model: Cohort,
+          include: [
+            {
+              model: User
+            }
+          ]
+        }
+      ]
+    }));
+  }
+  catch(ex){
+    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
+    next(ex);
+  }
+});
+
+app.get('/admin/promptAttempts', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await PromptAttempt.findAll({
+      include: [
+      ]
+    }));
   }
   catch(ex){
     res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);

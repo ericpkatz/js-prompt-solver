@@ -13,6 +13,14 @@ export const attemptLogin = ()=> {
   };
 };
 
+export const fetchAdmin = ()=> {
+  return (dispatch)=> {
+    dispatch(fetchUsers());
+    dispatch(fetchCourses());
+    dispatch(fetchAdminPromptAttempts());
+  };
+};
+
 export const fetchCourses = ()=> {
   return async(dispatch)=> {
     const response = await axios('/api/admin/courses', {
@@ -20,6 +28,26 @@ export const fetchCourses = ()=> {
       withCredentials: true
     });
     dispatch({ type: 'SET_COURSES', courses: response.data });
+  };
+};
+
+export const fetchAdminPromptAttempts = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/promptAttempts', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_ADMIN_PROMPT_ATTEMPTS', promptAttempts: response.data });
+  };
+};
+
+export const fetchUsers = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/users', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_USERS', users: response.data });
   };
 };
 
@@ -118,6 +146,20 @@ const courses = (state = [], action)=> {
   return state;
 };
 
+const users = (state = [], action)=> {
+  if(action.type === 'SET_USERS'){
+    return action.users;
+  }
+  return state;
+};
+
+const adminPromptAttempts = (state = [], action)=> {
+  if(action.type === 'SET_ADMIN_PROMPT_ATTEMPTS'){
+    return action.promptAttempts;
+  }
+  return state;
+};
+
 const prompts = (state = [], action)=> {
   if(action.type === 'SET_PROMPTS'){
     return action.prompts;
@@ -154,7 +196,9 @@ const assignments = (state = [], action)=> {
 };
 
 const admin = combineReducers({
-  courses
+  courses,
+  users,
+  promptAttempts: adminPromptAttempts
 });
 
 const reducer = combineReducers({

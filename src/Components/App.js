@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments, fetchFeedbacks} from '../store';
+import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments, fetchFeedbacks, fetchAdmin} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 import Cohort from './Cohort';
@@ -33,7 +33,7 @@ const App = ()=> {
 
   useEffect(()=> {
     if(auth.isAdmin){
-      dispatch(fetchCourses());
+      dispatch(fetchAdmin());
     }
     if(auth.id){
       dispatch(fetchCohorts());

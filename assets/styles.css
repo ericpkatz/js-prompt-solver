@@ -83,3 +83,11 @@ section#welcome {
 #feedback-grid h3 {
   text-align: center;
 }
+
+#admin-dashboard {
+  display: flex;
+}
+
+#admin-dashboard > * {
+  flex: 1;
+}
