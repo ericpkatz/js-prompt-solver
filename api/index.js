@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Cohort, User, Course, PromptAttempt } = require('../db');
+const { Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -116,6 +116,66 @@ app.get('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
   }
 });
 
+app.post('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await User.create(req.body));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/admin/cohorts', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await Cohort.create(req.body));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/admin/enrollments', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await Enrollment.create(req.body));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.delete('/admin/cohorts/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    const cohort = await Cohort.findByPk(req.params.id);
+    await cohort.destroy();
+    res.sendStatus(201);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.delete('/admin/users/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    const user = await User.findByPk(req.params.id);
+    await user.destroy();
+    res.sendStatus(201);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.delete('/admin/enrollments/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    const enrollment = await Enrollment.findByPk(req.params.id);
+    await enrollment.destroy();
+    res.sendStatus(201);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
     res.send(await Course.findAll({
@@ -132,7 +192,6 @@ app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
     }));
   }
   catch(ex){
-    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
     next(ex);
   }
 });

@@ -13,6 +13,12 @@ app.get('/', (req, res, next)=> res.render(path.join(__dirname, 'index.html'), {
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID
 }));
 
+app.use((req, res, next)=> {
+  const err = new Error(`${req.url} not found`);
+  err.status = 404;
+  next(err);
+});
+
 app.use((err, req, res, next)=> {
   console.log(err);
   res.status(err.status || 500).send({ error: err.message || err});

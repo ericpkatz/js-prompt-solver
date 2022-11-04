@@ -3,15 +3,6 @@ body {
   margin: 0;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-form > * {
-  margin: 1rem;
-}
-
 nav {
   display: flex;
   justify-content: space-around;
@@ -21,6 +12,10 @@ nav {
 
 a {
   color: #333;
+}
+
+li {
+  margin-bottom: 0.5rem;
 }
 
 nav a {
@@ -88,6 +83,20 @@ section#welcome {
   display: flex;
 }
 
+#admin-dashboard ul{
+  list-style-type: none;
+}
+
 #admin-dashboard > * {
   flex: 1;
+}
+
+#admin-dashboard .cohort-card{
+  border: solid 1px gray;
+  padding: 1rem;
+}
+
+
+.error {
+  color: tomato;
 }

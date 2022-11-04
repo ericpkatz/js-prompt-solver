@@ -1,8 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import CreateCohort from './CreateCohort';
+import CreateUser from './CreateUser';
+import AddEnrollment from './AddEnrollment';
+import { deleteUser, deleteCohort, deleteEnrollment } from '../../store';
 
 const AdminDashboard = ()=> {
   const { admin : { courses, users, promptAttempts } } = useSelector(state => state);
+  const dispatch = useDispatch();
   return (
     <div id='admin-dashboard'>
       <section>
@@ -12,21 +17,17 @@ const AdminDashboard = ()=> {
           courses.map( course => {
             return (
               <li key={ course.id }>
-                { course.title }
-                <form>
-                  <input placeholder='add cohort'/>
-                </form>
+                <h3>{ course.title }</h3>
+                <CreateCohort course={ course } courseId={ course.id }/>
                 <ul>
                   {
                     course.cohorts.map( cohort => {
                       return (
-                        <li key={ cohort.id }>
-                          { cohort.name }
-                          <form>
-                            <select>
-                              <option>Add Enrollment</option>
-                            </select>
-                          </form>
+                        <li key={ cohort.id } className='cohort-card'>
+                          <h4>{ cohort.name }
+                          <button className='btn btn-danger' onClick={ ()=> dispatch(deleteCohort(cohort)) }>x</button>
+                          </h4>
+                          <AddEnrollment cohort={ cohort }/>
                           <ul>
                             {
                               cohort.users.map( user => {
@@ -36,6 +37,7 @@ const AdminDashboard = ()=> {
                                     {
                                       user.login
                                     } ({ _promptAttempts.length })
+                                    <button className='btn btn-danger' onClick={ ()=> dispatch(deleteEnrollment(user.enrollment.id))}>x</button>
                                   </li>
                                 );
                               })
@@ -54,12 +56,14 @@ const AdminDashboard = ()=> {
       </section>
       <section>
       <h2>Users</h2>
+      <CreateUser />
       <ul>
         {
           users.map( user => {
             return (
               <li key={ user.id }>
                 { user.login }
+                <button className='btn btn-danger' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
               </li>
             )
           })
