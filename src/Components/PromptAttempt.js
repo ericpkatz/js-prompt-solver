@@ -42,7 +42,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const _executeCode = ()=> {
     const logger = _logger(_console);
-    executeCode(editor.getValue(), logger, JSHINT);
+    executeCode(`${(codePrompt && codePrompt.scaffold) ? codePrompt.scaffold.trim() : ''};${editor.getValue()}`, logger, JSHINT);
   }
 
   const save = ev => {
