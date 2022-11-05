@@ -44,6 +44,8 @@ section#welcome {
 
 .CodeMirror {
   font-size: 1.2rem;
+  border: 1px solid #eee;
+  height: auto;
 }
 
 .console {
@@ -99,4 +101,7 @@ section#welcome {
 
 .error {
   color: tomato;
+}
+
+.scaffold {
 }

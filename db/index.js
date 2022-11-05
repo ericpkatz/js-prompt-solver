@@ -73,6 +73,9 @@ FooBarBazz is a course which will test your knowledge of Foo Bar Bazz.
       The numbers should start at 1 and go up to n.
       console.log(generateArray(3));//shold log [1, 2, 3]
       `,
+      scaffold: `
+const data = [ 1, 2, 3];
+      `,
       rank: 2
     });
     const arrayOf3 = await CodePrompt.create({

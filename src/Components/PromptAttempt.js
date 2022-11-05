@@ -3,11 +3,26 @@ import { savePromptAttempt } from '../store';
 import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
 
-const PromptAttempt = ({ promptAttempt })=> {
+const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   const [el, setEl] = useState(null);
+  const [elScaffold, setElScaffold] = useState(null);
   const [editor, setEditor] = useState(null);
   const [ _console, setConsole] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(()=> {
+    if(elScaffold){
+      console.log(elScaffold);
+      const _editor = CodeMirror(elScaffold, {
+        value: (codePrompt && codePrompt.scaffold) ? codePrompt.scaffold.trim() : '', 
+        lineNumbers: false,
+        language: 'javascript',
+        readOnly: true,
+        viewportMargin: Infinity
+      });
+      _editor.setSize('100%', '3rem');
+    }
+  }, [elScaffold]);
 
   useEffect(()=> {
     if(el){
@@ -36,10 +51,12 @@ const PromptAttempt = ({ promptAttempt })=> {
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
+  console.log(codePrompt);
 
   return (
     <div>
       <form onSubmit={ save }>
+        <div className='scaffold' ref={el => setElScaffold(el)}></div>
         <div id='ide'>
           <div ref={el => setEl(el)}></div>
           <div className='console' ref={el => setConsole(el)}></div>

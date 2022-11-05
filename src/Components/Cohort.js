@@ -44,7 +44,7 @@ const Cohort = ()=> {
                                   { codePrompt.title }
                                   </pre>
                                   ({ idx + 1} of { assignment.topic.codePrompts.length})
-                                  <PromptAttempt promptAttempt={ promptAttempt }/>
+                                  <PromptAttempt promptAttempt={ promptAttempt } codePrompt={ codePrompt }/>
                                 </li>
                               );
                             })

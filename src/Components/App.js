@@ -65,7 +65,7 @@ const App = ()=> {
             !!auth.id && (
               <div>
                 Welcome { auth.login }!
-                <button onClick={ _logout }>Logout</button>
+                <button className='btn btn-primary' onClick={ _logout }>Logout</button>
               </div>
             )
           }
