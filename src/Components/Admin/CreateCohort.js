@@ -27,8 +27,10 @@ const CreateCohort = ({ courseId, course })=> {
         }
         </pre>
       }
-      <input value={ name } placeholder={`add new cohort for ${ course.title }`} onChange={ ev => setName(ev.target.value )}/>
-      <button disabled={ !name }>Create Cohort</button>
+      <div className='mb-3'>
+      <input className='form-control' value={ name } placeholder={`add new cohort for ${ course.title }`} onChange={ ev => setName(ev.target.value )}/>
+      </div>
+      <button disabled={ !name } className='btn btn-primary btn-sm'>Create Cohort</button>
     </form>
   );
 };

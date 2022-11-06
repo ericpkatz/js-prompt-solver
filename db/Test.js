@@ -26,7 +26,7 @@ const Test = conn.define('test', {
     type: ENUM('NUMERIC', 'STRING'),
     allowNull: false,
   },
-  promptId: {
+  codePromptId: {
     type: UUID,
     allowNull: false
   }

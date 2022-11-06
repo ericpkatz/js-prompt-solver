@@ -25,6 +25,9 @@ const Cohort = ()=> {
               <Link to={`/cohorts/${cohort.id}/feedback`}>Feedback</Link>
               <div>
                 {
+                  !filteredAssignments.length && <div>You have no assignments</div> 
+                }
+                {
                   filteredAssignments.map( assignment => {
                     return (
                       <div key={ assignment.id }>

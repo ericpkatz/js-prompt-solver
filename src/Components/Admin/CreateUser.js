@@ -27,8 +27,10 @@ const CreateUser = ({ courseId })=> {
         }
         </pre>
       }
-      <input value={ login } placeholder='github login' onChange={ ev => setLogin(ev.target.value )}/>
-      <button disabled={ !login }>Create User</button>
+      <div className='mb-3'>
+      <input className='form-control' value={ login } placeholder='github login' onChange={ ev => setLogin(ev.target.value )}/>
+      </div>
+      <button disabled={ !login } className='btn btn-primary btn-sm'>Create User</button>
     </form>
   );
 };

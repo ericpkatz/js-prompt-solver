@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const { UUID, DATE } = conn.Sequelize;
+const { UUID, DATE, BOOLEAN } = conn.Sequelize;
 const { id } = require('./common');
 
 const ONE_DAY = 1000*60*60*24;
@@ -12,6 +12,11 @@ const Assignment = conn.define('assignment', {
   },
   topicId: {
     type: UUID,
+    allowNull: false
+  },
+  active: {
+    type: BOOLEAN,
+    defaultValue: false,
     allowNull: false
   },
   assigned: {

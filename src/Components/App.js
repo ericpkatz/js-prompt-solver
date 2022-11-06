@@ -65,8 +65,10 @@ const App = ()=> {
           {
             !!auth.id && (
               <div>
+                <label className='pe-3'>
                 Welcome { auth.login }!
-                <button className='btn btn-primary' onClick={ _logout }>Logout</button>
+                </label>
+                <button className='btn btn-primary btn-sm' onClick={ _logout }>Logout</button>
               </div>
             )
           }

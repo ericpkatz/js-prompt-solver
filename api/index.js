@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -120,7 +120,10 @@ app.get('/admin/topics', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
     res.send(await Topic.findAll({
       include: [{
-        model: CodePrompt
+        model: CodePrompt,
+        include: [
+          { model: Test }
+        ]
       }]
     }));
   }

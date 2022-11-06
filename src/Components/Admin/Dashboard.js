@@ -11,7 +11,7 @@ const AdminDashboard = ()=> {
   const dispatch = useDispatch();
   return (
     <div id='admin-dashboard'>
-      <section>
+      <section className='me-3'>
       <h2>Courses</h2>
       <ul>
         {
@@ -26,7 +26,7 @@ const AdminDashboard = ()=> {
                       return (
                         <li key={ cohort.id } className='cohort-card'>
                           <h4>{ cohort.name }
-                          <button className='btn btn-danger' onClick={ ()=> dispatch(deleteCohort(cohort)) }>x</button>
+                          <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteCohort(cohort)) }>x</button>
                           </h4>
                           <AddEnrollment cohort={ cohort }/>
                           <ul>
@@ -38,7 +38,7 @@ const AdminDashboard = ()=> {
                                     {
                                       user.login
                                     } ({ _promptAttempts.length })
-                                    <button className='btn btn-danger' onClick={ ()=> dispatch(deleteEnrollment(user.enrollment.id))}>x</button>
+                                    <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteEnrollment(user.enrollment.id))}>x</button>
                                   </li>
                                 );
                               })
@@ -64,7 +64,7 @@ const AdminDashboard = ()=> {
             return (
               <li key={ user.id }>
                 { user.login }
-                <button className='btn btn-danger' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
+                <button className='btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
               </li>
             )
           })

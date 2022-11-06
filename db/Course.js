@@ -27,17 +27,23 @@ Course.seed = async function(data){
   });
   topics = await Promise.all(topics.map(topic => conn.models.topic.create(topic)));
   let codePrompts = [];
-  data.topics.forEach((topic, idx) => {
-    topic.codePrompts.forEach((codePrompt)=> {
-      console.log(topics[idx].id, codePrompt);
-      codePrompts.push({
+  const promises = data.topics.map((topic, idx) => {
+    return Promise.all(topic.codePrompts.map((codePrompt)=> {
+      return conn.models.codePrompt.create({
         ...codePrompt,
         topicId: topics[idx].id
+      })
+      .then( _created => {
+        return Promise.all(codePrompt.tests.map( test => {
+          return conn.models.test.create({ ...test, codePromptId: _created.id });
+
+        }));
       });
-    });
+    }));
   });
-  console.log(codePrompts);
-  codePrompts = await Promise.all(codePrompts.map( codePrompt => conn.models.codePrompt.create(codePrompt)));
+  await Promise.all(promises);
+  //console.log(codePrompts);
+  //codePrompts = await Promise.all(codePrompts.map( codePrompt => conn.models.codePrompt.create(codePrompt)));
 }
 
 module.exports = Course;

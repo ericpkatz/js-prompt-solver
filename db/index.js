@@ -8,6 +8,7 @@ const Assignment = require('./Assignment');
 const Cohort = require('./Cohort');
 const PromptAttempt = require('./PromptAttempt');
 const Feedback = require('./Feedback');
+const Test = require('./Test');
 
 User.belongsToMany(Cohort, { through: Enrollment });
 Cohort.belongsToMany(User, { through: Enrollment });
@@ -39,6 +40,8 @@ Feedback.belongsTo(PromptAttempt);
 Feedback.belongsTo(Enrollment);
 
 PromptAttempt.hasMany(Feedback);
+
+CodePrompt.hasMany(Test);
 
 const syncAndSeed = async()=> {
   await conn.sync({ force: true });
@@ -149,5 +152,6 @@ module.exports = {
   Assignment,
   Cohort,
   PromptAttempt,
-  syncAndSeed
+  syncAndSeed,
+  Test
 };
