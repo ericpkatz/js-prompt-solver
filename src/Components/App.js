@@ -3,6 +3,7 @@ import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments, fetchFeedbacks, fetchAdmin} from '../store';
 import AdminDashboard from './Admin/Dashboard';
+import AdminCourse from './Admin/Course';
 import PromptAttempt from './PromptAttempt';
 import Cohort from './Cohort';
 import Home from './Home';
@@ -79,6 +80,7 @@ const App = ()=> {
         <Routes>
           <Route path='/' element={ <Home /> } />
           <Route path='/admin' element={ <AdminDashboard /> } />
+          <Route path='/admin/courses/:id' element={ <AdminCourse /> } />
           <Route path='/cohorts/:id' element={ <Cohort /> } />
           <Route path='/cohorts/:id/feedback' element={ <Feedback /> } />
         </Routes>

@@ -41,8 +41,11 @@ Feedback.belongsTo(Enrollment);
 PromptAttempt.hasMany(Feedback);
 
 const syncAndSeed = async()=> {
-    await conn.sync({ force: true });
-    //create two users and a course
+  await conn.sync({ force: true });
+  const javascript = require('./seed/courses/javascript');
+  await Course.seed(javascript);
+  
+  /*
     const [pk, javaScript, epk, fooBarBazz] = await Promise.all([
       User.create({ login: 'prof-katz'}),
       Course.create({ title: 'JavaScript', description: `
@@ -119,7 +122,6 @@ console.log(generateArray(2, 4));//[2, 3, 4, 5]
   console.log(arr);
   `, assignmentId: arrayGenerationAssignmentA.id, submitted: true});
 
-  //This will result in Pk having to review Epks prompt
   await PromptAttempt.create({ enrollmentId: enrollmentPk.id, codePromptId: arrayOf3.id, attempt: `
   const generateArray = ()=> {
     return [1, 2, 3];
@@ -129,20 +131,12 @@ console.log(generateArray(2, 4));//[2, 3, 4, 5]
   `, assignmentId: arrayGenerationAssignmentA.id, submitted: true});
   }
 
-  //TODO - now that there is a new prompt, should this prompt also be assigned to a user for review?
-
   const feedbacks = await Feedback.findAll();
 
     const fooBarBazzTopic = await Topic.create({ title: 'foo bar bazz', courseId: fooBarBazz.id});
 
-  /*
-    const assignmentmentFooBar = await Assignment.create({ topicId: topic3.id, cohortId: cohort2.id, assigned: new Date().getTime() + ONE_DAY});
-    const codePrompt5 = await CodePrompt.create({
-      topicId: topic3.id,
-      title: 'whatever dude'
-    });
-    */
   return { course: javaScript, user: pk, cohort: cohortJSA };
+  */
 };
 
 module.exports = {

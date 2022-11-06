@@ -15,6 +15,9 @@ const CodePrompt = conn.define('codePrompt', {
   scaffold: {
     type: TEXT
   },
+  scaffoldAfter: {
+    type: TEXT
+  },
   topicId: {
     type: UUID,
     allowNull: false

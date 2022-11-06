@@ -16,6 +16,7 @@ export const attemptLogin = ()=> {
 export const fetchAdmin = ()=> {
   return (dispatch)=> {
     dispatch(fetchUsers());
+    dispatch(fetchTopics());
     dispatch(fetchCourses());
     dispatch(fetchAdminPromptAttempts());
   };
@@ -48,6 +49,16 @@ export const fetchUsers = ()=> {
       withCredentials: true
     });
     dispatch({ type: 'SET_USERS', users: response.data });
+  };
+};
+
+export const fetchTopics = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/topics', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_TOPICS', topics: response.data });
   };
 };
 
@@ -217,6 +228,13 @@ const users = (state = [], action)=> {
   return state;
 };
 
+const topics = (state = [], action)=> {
+  if(action.type === 'SET_TOPICS'){
+    return action.topics;
+  }
+  return state;
+};
+
 const adminPromptAttempts = (state = [], action)=> {
   if(action.type === 'SET_ADMIN_PROMPT_ATTEMPTS'){
     return action.promptAttempts;
@@ -262,7 +280,8 @@ const assignments = (state = [], action)=> {
 const admin = combineReducers({
   courses,
   users,
-  promptAttempts: adminPromptAttempts
+  promptAttempts: adminPromptAttempts,
+  topics: topics
 });
 
 const reducer = combineReducers({

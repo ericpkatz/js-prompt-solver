@@ -4,6 +4,7 @@ import CreateCohort from './CreateCohort';
 import CreateUser from './CreateUser';
 import AddEnrollment from './AddEnrollment';
 import { deleteUser, deleteCohort, deleteEnrollment } from '../../store';
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = ()=> {
   const { admin : { courses, users, promptAttempts } } = useSelector(state => state);
@@ -17,7 +18,7 @@ const AdminDashboard = ()=> {
           courses.map( course => {
             return (
               <li key={ course.id }>
-                <h3>{ course.title }</h3>
+                <h3><Link to={`/admin/courses/${course.id}`}>{ course.title }</Link></h3>
                 <CreateCohort course={ course } courseId={ course.id }/>
                 <ul>
                   {

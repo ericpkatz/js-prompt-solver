@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -20,7 +20,7 @@ const isLoggedIn = async(req, res,next)=> {
     next();
   }
   catch(ex){
-    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
+    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/; Max-Age=0;`);
     next(ex);
   }
 };
@@ -110,6 +110,19 @@ app.get('/prompts', isLoggedIn, async(req, res, next)=> {
 app.get('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
     res.send(await User.findAll());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/admin/topics', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await Topic.findAll({
+      include: [{
+        model: CodePrompt
+      }]
+    }));
   }
   catch(ex){
     next(ex);
