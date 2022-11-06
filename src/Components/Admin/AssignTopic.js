@@ -5,6 +5,9 @@ import { assignTopic } from '../../store';
 const AssignTopic = ({ topic, cohorts })=> {
   const { admin : { courses, users, promptAttempts } } = useSelector(state => state);
   const dispatch = useDispatch();
+  const create = (id)=> {
+    dispatch(assignTopic({ cohortId: id, topicId: topic.id}));
+  };
   return (
     <form>
       <select className='form-select' onChange={ (ev)=> create(ev.target.value) }>
@@ -12,7 +15,7 @@ const AssignTopic = ({ topic, cohorts })=> {
         {
           cohorts.map( cohort => {
             return (
-              <option key={ cohort.id }>{ cohort.name }</option>
+              <option value={ cohort.id } key={ cohort.id }>{ cohort.name }</option>
             );
           })
         }

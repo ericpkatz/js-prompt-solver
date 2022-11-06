@@ -106,6 +106,17 @@ export const createCohort = (cohort)=> {
   };
 };
 
+export const assignTopic = (assignment)=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/assignments', {
+      method: 'post',
+      withCredentials: true,
+      data: assignment 
+    });
+    dispatch(fetchCourses());
+  };
+};
+
 export const deleteCohort = (cohort)=> {
   return async(dispatch)=> {
     const response = await axios(`/api/admin/cohorts/${cohort.id}`, {

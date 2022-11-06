@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { Assignment, Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -135,6 +135,15 @@ app.get('/admin/topics', isLoggedIn, isAdmin, async(req, res, next)=> {
 app.post('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
     res.send(await User.create(req.body));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/admin/assignments', isLoggedIn, isAdmin, async(req, res, next)=> {
+  try {
+    res.send(await Assignment.toggleAssignment(req.body));
   }
   catch(ex){
     next(ex);

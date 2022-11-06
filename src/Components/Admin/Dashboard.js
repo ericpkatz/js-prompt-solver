@@ -64,7 +64,7 @@ const AdminDashboard = ()=> {
             return (
               <li key={ user.id }>
                 { user.login }
-                <button className='btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
+                <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
               </li>
             )
           })
