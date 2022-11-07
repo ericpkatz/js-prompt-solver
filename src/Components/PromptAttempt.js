@@ -57,6 +57,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   return (
     <div>
+      <h3>{ codePrompt.title }</h3>
       <form onSubmit={ save }>
         <div className='scaffold' ref={el => setElScaffold(el)}></div>
         <div id='ide'>

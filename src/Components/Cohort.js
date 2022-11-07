@@ -29,16 +29,29 @@ const Cohort = ()=> {
                     cohort
                       .topic
                       .codePrompts
+                      .sort((a, b)=> a.rank - b.rank)
                       .map( codePrompt => {
                         const promptAttempt = enrollment.promptAttempts
                           .find(promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {
                             codePromptId: codePrompt.id, enrollmentId: enrollment.id }
+                        if(shown || promptAttempt.submitted){
+                          return null;
+                        }
+                        if(!promptAttempt.submitted){
+                          shown = true;
+                        }
                         return (
+                          <div key = {codePrompt.id }>
+                          ({ codePrompt.rank })
                           <PromptAttempt key={ codePrompt.id } promptAttempt = { promptAttempt} codePrompt={ codePrompt }/>
+                          </div>
                         );
                       })
                   }
                 </ul>
+                {
+                  !shown && cohort.topic && cohort.topic.codePrompts.length && <div>You have attempted all of your code prompts for this topic. Would you like to practice more, or leave feedback for others?</div>
+                }
               </div>
             </div>
           );

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreateCohort from './CreateCohort';
 import CreateUser from './CreateUser';
 import AddEnrollment from './AddEnrollment';
+import SetTopicForCohort from './SetTopicForCohort';
 import { deleteUser, deleteCohort, deleteEnrollment } from '../../store';
 import { Link } from 'react-router-dom';
 
@@ -28,15 +29,20 @@ const AdminDashboard = ()=> {
                           <h4>{ cohort.name }
                           <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteCohort(cohort)) }>x</button>
                           </h4>
+                          {
+                            cohort.topicId && <div>{ cohort.topic.title }</div>
+                          }
+                          <SetTopicForCohort cohort={ cohort }/>
                           <AddEnrollment cohort={ cohort }/>
                           <ul>
                             {
                               cohort.enrollments.map( ({ user, id, promptAttempts }) => {
                                 return (
                                   <li key={ user.id }>
-                                    {
+                                    <Link to={ `/admin/users/${ user.id }/enrollments/${id}`}>{
                                       user.login
                                     } ({ promptAttempts.length })
+                                    </Link>
                                     <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteEnrollment(id))}>x</button>
                                   </li>
                                 );
@@ -62,7 +68,7 @@ const AdminDashboard = ()=> {
           users.map( user => {
             return (
               <li key={ user.id }>
-                { user.login }
+                <Link to={`/admin/users/${user.id}`}>{ user.login }</Link>
                 <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
               </li>
             )
