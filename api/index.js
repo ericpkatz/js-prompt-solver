@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Assignment, Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
 
 module.exports = app;
 
@@ -34,15 +34,6 @@ const isAdmin = async(req, res, next)=> {
   next(error);
 };
 
-app.get('/assignments', isLoggedIn, async(req, res, next)=> {
-  try{
-    res.send(await req.user.getAssignments());
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
 app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getFeedbacks());
@@ -55,7 +46,13 @@ app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
 app.get('/cohorts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getCohorts({
-      include: [Course]
+      include: [
+        Course,
+        {
+          model: Topic,
+          as: 'activeTopic'
+        }
+      ]
     }));
   }
   catch(ex){
@@ -141,9 +138,11 @@ app.post('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
   }
 });
 
-app.post('/admin/assignments', isLoggedIn, isAdmin, async(req, res, next)=> {
+app.put('/admin/cohorts/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
   try {
-    res.send(await Assignment.toggleAssignment(req.body));
+    const cohort = await Cohort.findByPk(req.params.id);
+    await cohort.update(req.body);
+    res.send(cohort);
   }
   catch(ex){
     next(ex);
@@ -210,6 +209,10 @@ app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
           include: [
             {
               model: User
+            },
+            {
+              model: Topic,
+              as: 'activeTopic'
             }
           ]
         }

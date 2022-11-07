@@ -108,10 +108,10 @@ export const createCohort = (cohort)=> {
 
 export const assignTopic = (assignment)=> {
   return async(dispatch)=> {
-    const response = await axios('/api/admin/assignments', {
-      method: 'post',
+    const response = await axios(`/api/admin/cohorts/${assignment.cohortId}`, {
+      method: 'put',
       withCredentials: true,
-      data: assignment 
+      data: { activeTopicId: assignment.topicId } 
     });
     dispatch(fetchCourses());
   };
@@ -161,20 +161,8 @@ export const createFeedback = (feedback)=> {
 
 export const clear = (navigate)=> {
   return (dispatch)=> {
-    dispatch({ type: 'SET_ASSIGNMENTS', assignments: [] });
-    dispatch({ type: 'SET_COHORTS', cohorts: [] });
     dispatch({ type: 'SET_COHORTS', cohorts: [] });
     navigate('/');
-  };
-};
-
-export const fetchAssignments = ()=> {
-  return async(dispatch)=> {
-    const response = await axios('/api/assignments', {
-      method: 'get',
-      withCredentials: true
-    });
-    dispatch({ type: 'SET_ASSIGNMENTS', assignments: response.data });
   };
 };
 
@@ -281,13 +269,6 @@ const feedbacks = (state = [], action)=> {
   return state;
 };
 
-const assignments = (state = [], action)=> {
-  if(action.type === 'SET_ASSIGNMENTS'){
-    return action.assignments;
-  }
-  return state;
-};
-
 const admin = combineReducers({
   courses,
   users,
@@ -300,7 +281,6 @@ const reducer = combineReducers({
   admin,
   cohorts,
   promptAttempts,
-  assignments,
   feedbacks
 });
 

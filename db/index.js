@@ -4,7 +4,6 @@ const Course = require('./Course');
 const CodePrompt = require('./CodePrompt');
 const Topic = require('./Topic');
 const Enrollment = require('./Enrollment');
-const Assignment = require('./Assignment');
 const Cohort = require('./Cohort');
 const PromptAttempt = require('./PromptAttempt');
 const Feedback = require('./Feedback');
@@ -19,21 +18,15 @@ Course.hasMany(Cohort);
 Topic.belongsTo(Course);
 Course.hasMany(Topic);
 
-Assignment.belongsTo(Topic);
-Assignment.belongsTo(Cohort);
-
-Cohort.hasMany(Assignment);
-Topic.hasMany(Assignment);
+Cohort.belongsTo(Topic, { as: 'activeTopic' });
 
 CodePrompt.belongsTo(Topic);
 Topic.hasMany(CodePrompt);
 
 PromptAttempt.belongsTo(Enrollment);
-PromptAttempt.belongsTo(Assignment);
 PromptAttempt.belongsTo(CodePrompt);
 
 Enrollment.hasMany(PromptAttempt);
-Assignment.hasMany(PromptAttempt);
 CodePrompt.hasMany(PromptAttempt);
 
 Feedback.belongsTo(PromptAttempt);
@@ -149,7 +142,6 @@ module.exports = {
   CodePrompt,
   Topic,
   Enrollment,
-  Assignment,
   Cohort,
   PromptAttempt,
   syncAndSeed,

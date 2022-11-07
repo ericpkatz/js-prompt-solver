@@ -24,11 +24,24 @@ const Course = ()=> {
         <ul>
           {
             filteredTopics.map( topic => {
+              const cohortsWithTopic = course.cohorts.filter( cohort => cohort.activeTopicId === topic.id);
               return (
                 <li key={ topic.id }>
                   {
                     topic.title
                   }
+                  <ul>
+                    {
+                      cohortsWithTopic.map( cohort => {
+                        return (
+                          <li key={ cohort.id }>
+                            Currently assigned to { cohort.name }
+                            <button className='btn btn-danger btn-sm ms-2'>x</button>
+                          </li>
+                        );
+                      })
+                    }
+                  </ul>
                   ({ topic.codePrompts.length })
                   <AssignTopic topic={ topic } cohorts={ course.cohorts }/>
                 </li>
