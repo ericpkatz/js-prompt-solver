@@ -19,6 +19,11 @@ const PromptAttempt = conn.define('promptAttempt', {
     type: BOOLEAN,
     defaultValue: false,
     allowNull: false
+  },
+  archived: {
+    type: BOOLEAN,
+    defaultValue: false,
+    allowNull: false
   }
 });
 

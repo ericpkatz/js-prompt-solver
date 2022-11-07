@@ -75,6 +75,48 @@ User.prototype.attemptPrompt = async function(promptAttempt){
   }
 }
 
+User.prototype.reset = async function(enrollmentId, topicId){
+  /*
+  if(!(await this.isYourEnrollment(enrollmentId))){
+    throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${enrollmentId}`);
+  }
+  return 'foo';
+  */
+  const enrollment = await conn.models.enrollment.findByPk(enrollmentId, {
+    include: [
+      {
+        model: conn.models.cohort,
+        include: [
+          {
+            model: conn.models.topic,
+            include: [
+              {
+                model: conn.models.codePrompt
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+  if(enrollment.userId !== this.id){
+    throw Error('this is not your enrollment');
+  }
+  if(!enrollment.cohort.topicId === topicId){
+    throw Error(`topic mismatch for ${topicId} and cohort topicId ${enrollment.cohort.topicId}`);
+  }
+  const codePromptIds = enrollment.cohort.topic.codePrompts.map( codePrompt=> codePrompt.id);
+  const promptAttempts = await conn.models.promptAttempt.findAll({
+    where: {
+      enrollmentId: enrollmentId,
+      codePromptId: {
+        [Op.in]: codePromptIds
+      }
+    }
+  });
+  await Promise.all(promptAttempts.map(promptAttempt => promptAttempt.update({ archived: true })));
+}
+
 User.authenticate = async(code)=> {
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
   let response = await axios.post('https://github.com/login/oauth/access_token', {

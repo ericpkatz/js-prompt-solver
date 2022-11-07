@@ -1,5 +1,5 @@
 const conn = require('./conn');
-const { INTEGER, STRING, TEXT, UUID } = conn.Sequelize;
+const { BOOLEAN, INTEGER, STRING, TEXT, UUID } = conn.Sequelize;
 const { id } = require('./common');
 
 const CodePrompt = conn.define('codePrompt', {
@@ -13,10 +13,16 @@ const CodePrompt = conn.define('codePrompt', {
     }
   },
   scaffold: {
-    type: TEXT
+    type: TEXT,
+    get: function(){
+      return this.getDataValue('scaffold') || '';
+    }
   },
   scaffoldAfter: {
-    type: TEXT
+    type: TEXT,
+    get: function(){
+      return this.getDataValue('scaffoldAfter') || '';
+    }
   },
   topicId: {
     type: UUID,
@@ -25,7 +31,7 @@ const CodePrompt = conn.define('codePrompt', {
   rank: {
     type: INTEGER,
     defaultValue: 5
-  }
+  },
 });
 
 module.exports = CodePrompt;

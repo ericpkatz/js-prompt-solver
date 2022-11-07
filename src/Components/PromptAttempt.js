@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
 
 const PromptAttempt = ({ promptAttempt, codePrompt })=> {
+  console.log(codePrompt);
   const [el, setEl] = useState(null);
   const [elScaffold, setElScaffold] = useState(null);
+  const [elScaffoldAfter, setElScaffoldAfter] = useState(null);
   const [editor, setEditor] = useState(null);
   const [ _console, setConsole] = useState(null);
   const dispatch = useDispatch();
@@ -19,12 +21,27 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
         readOnly: true,
         viewportMargin: Infinity
       });
-      _editor.setSize('100%', '3rem');
+      const lines = codePrompt.scaffold.split('\n').length;
+      _editor.setSize('100%', `${lines * 1.5}rem`);
     }
   }, [elScaffold]);
 
   useEffect(()=> {
-    if(el && !editor){
+    if(elScaffoldAfter){
+      const _editor = CodeMirror(elScaffoldAfter, {
+        value: codePrompt.scaffoldAfter.trim(), 
+        lineNumbers: false,
+        language: 'javascript',
+        readOnly: true,
+        viewportMargin: Infinity
+      });
+      const lines = codePrompt.scaffoldAfter.split('\n').length;
+      _editor.setSize('100%', `${lines * 1.5}rem`);
+    }
+  }, [elScaffold]);
+
+  useEffect(()=> {
+    if(el){
       const _editor = CodeMirror(el, {
         value: promptAttempt.attempt || '', 
         lineNumbers: true,
@@ -36,16 +53,13 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
         setAttempt(ev.getValue());
       });
     }
-    if(editor && promptAttempt.attempt){
-      editor.setValue(promptAttempt.attempt);
-    }
-  }, [el, promptAttempt, editor]);
+  }, [el]);
 
   const [attempt, setAttempt] = useState(promptAttempt.attempt || '');
 
   const _executeCode = ()=> {
     const logger = _logger(_console);
-    executeCode(`${(codePrompt && codePrompt.scaffold) ? codePrompt.scaffold.trim() : ''};${editor.getValue()}`, logger, JSHINT);
+    executeCode(`${codePrompt.scaffold};${editor.getValue()};${codePrompt.scaffoldAfter}`, logger, JSHINT);
   }
 
   const save = ev => {
@@ -64,6 +78,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
           <div ref={el => setEl(el)}></div>
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
+        <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
         <div>
           <button id='run' disabled={!attempt}>Run Your Code</button>
           <button id='submit' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>

@@ -8,14 +8,15 @@ module.exports = {
           title: 'Write a function which adds two numbers',
           rank: 1,
           scaffold: `
-  const a = 2;
-  const b = 3;
-  const c = 1;
-          `,
+const a = 2;
+const b = 3;
+const c = 1;`,
           scaffoldAfter: `
-  const result1 = add(a, b);
-  const result2 = add(b, c);
-          `,
+const result1 = add(a, b);
+const result2 = add(b, c);
+console.log(result1);
+console.log(result2);
+`,
           tests: [
             {
               input: 'result1',

@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useParams, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments } from '../store';
+import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments, resetTopic } from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 
 const Cohort = ()=> {
   const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
   const { id } = useParams();
+  const dispatch = useDispatch();
   const enrollment = enrollments.find( enrollment => enrollment.id === id );
   if(!enrollment){
     return null;
@@ -50,7 +51,7 @@ const Cohort = ()=> {
                   }
                 </ul>
                 {
-                  !shown && cohort.topic && cohort.topic.codePrompts.length && <div>You have attempted all of your code prompts for this topic. Would you like to practice more, or leave feedback for others?</div>
+                  !shown && cohort.topic && cohort.topic.codePrompts.length && <div>You have attempted all of your code prompts for this topic. Would you like to practice more, or leave feedback for others? Or would you like to archive these codePrompts and do these again? Practice, practice, practice! <button className='btn btn-primary btn-sm' onClick={ ()=> dispatch(resetTopic({ topicId: cohort.topicId, enrollmentId: enrollment.id}))}>Reset This Topic</button></div>
                 }
               </div>
             </div>

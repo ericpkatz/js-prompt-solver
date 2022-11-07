@@ -50,6 +50,16 @@ app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.put('/enrollments/:enrollmentId/topics/:topicId', isLoggedIn, async(req, res, next)=> {
+  try{
+    await req.user.reset(req.params.enrollmentId, req.params.topicId);
+    res.sendStatus(204);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getPromptAttempts());

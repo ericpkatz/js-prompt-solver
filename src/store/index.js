@@ -14,7 +14,6 @@ export const attemptLogin = ()=> {
   };
 };
 
-
 export const savePromptAttempt = (promptAttempt)=> {
   return async(dispatch)=> {
     const response = await axios('/api/promptAttempts', {
@@ -61,6 +60,17 @@ export const fetchFeedbacks = ()=> {
       withCredentials: true
     });
     dispatch({ type: 'SET_FEEDBACKS', feedbacks: response.data });
+  };
+};
+
+export const resetTopic = ({ enrollmentId, topicId})=> {
+  return async(dispatch)=> {
+    const url = `/api/enrollments/${enrollmentId}/topics/${topicId}`;
+    const response = await axios(url, {
+      method: 'put',
+      withCredentials: true
+    });
+    dispatch(fetchEnrollments());
   };
 };
 
