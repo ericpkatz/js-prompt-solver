@@ -9,8 +9,11 @@ const PromptAttempt = require('./PromptAttempt');
 const Feedback = require('./Feedback');
 const Test = require('./Test');
 
-User.belongsToMany(Cohort, { through: Enrollment });
-Cohort.belongsToMany(User, { through: Enrollment });
+Enrollment.belongsTo(User);
+Enrollment.belongsTo(Cohort);
+
+Cohort.hasMany(Enrollment);
+User.hasMany(Enrollment);
 
 Cohort.belongsTo(Course);
 Course.hasMany(Cohort);
@@ -18,7 +21,7 @@ Course.hasMany(Cohort);
 Topic.belongsTo(Course);
 Course.hasMany(Topic);
 
-Cohort.belongsTo(Topic, { as: 'activeTopic' });
+Cohort.belongsTo(Topic);
 
 CodePrompt.belongsTo(Topic);
 Topic.hasMany(CodePrompt);

@@ -6,18 +6,13 @@ import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 
 const Cohort = ()=> {
-  const { promptAttempts, codePrompts, auth, cohorts, assignments } = useSelector(state => state);
+  const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
   const { id } = useParams();
-  const cohort = cohorts.find(cohort => cohort.id === id);
-  if(!cohort){
+  const enrollment = enrollments.find( enrollment => enrollment.id === id );
+  if(!enrollment){
     return null;
   }
-  const filteredAssignments = assignments
-    .filter(assignment => assignment.cohortId === cohort.id)
-    .filter(({ due, assigned }) => {
-      const now = new Date();
-      return now > new Date(assigned) && now < new Date(due); 
-    });
+  const cohort = enrollment.cohort; 
   let shown = false;
   return (
             <div key={ cohort.id}>
@@ -25,41 +20,25 @@ const Cohort = ()=> {
               <Link to={`/cohorts/${cohort.id}/feedback`}>Feedback</Link>
               <div>
                 {
-                  !filteredAssignments.length && <div>You have no assignments</div> 
+                  !cohort.topic && <div>You have no assignments</div> 
                 }
-                {
-                  filteredAssignments.map( assignment => {
-                    return (
-                      <div key={ assignment.id }>
-                        { assignment.topic.title }
-                        ({ new Date(assignment.assigned).toLocaleDateString() })-({ new Date(assignment.due).toLocaleDateString() })
-                        <ul>
-                          {
-                            assignment.topic.codePrompts.sort((a, b)=> a.rank*1 - b.rank*1).map( (codePrompt, idx) => {
-                              const promptAttempt = promptAttempts.find( promptAttempt => promptAttempt.codePromptId === codePrompt.id) || { assignmentId: assignment.id, enrollmentId: cohort.enrollment.id, codePromptId: codePrompt.id };
-                              if(promptAttempt.submitted || shown){
-                                return null;
-                              }
-                              shown = true;
-                              return (
-                                <li key={ codePrompt.id }>
-                                  <pre>
-                                  { codePrompt.title }
-                                  </pre>
-                                  ({ idx + 1} of { assignment.topic.codePrompts.length})
-                                  <PromptAttempt promptAttempt={ promptAttempt } codePrompt={ codePrompt }/>
-                                </li>
-                              );
-                            })
-                          }
-                          {
-                            !shown && <li>You have completed all prompts for this topic</li>
-                          }
-                        </ul>
-                      </div>
-                    );
-                  })
-                }
+                
+                <ul>
+                  {
+                    !!cohort.topic && 
+                    cohort
+                      .topic
+                      .codePrompts
+                      .map( codePrompt => {
+                        const promptAttempt = enrollment.promptAttempts
+                          .find(promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {
+                            codePromptId: codePrompt.id, enrollmentId: enrollment.id }
+                        return (
+                          <PromptAttempt key={ codePrompt.id } promptAttempt = { promptAttempt} codePrompt={ codePrompt }/>
+                        );
+                      })
+                  }
+                </ul>
               </div>
             </div>
           );

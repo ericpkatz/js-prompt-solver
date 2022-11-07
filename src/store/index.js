@@ -63,6 +63,7 @@ export const fetchTopics = ()=> {
 };
 
 export const savePromptAttempt = (promptAttempt)=> {
+  console.log(promptAttempt);
   return async(dispatch)=> {
     const response = await axios('/api/promptAttempts', {
       method: 'post',
@@ -106,12 +107,12 @@ export const createCohort = (cohort)=> {
   };
 };
 
-export const assignTopic = (assignment)=> {
+export const assignTopic = ({ topicId, cohortId })=> {
   return async(dispatch)=> {
-    const response = await axios(`/api/admin/cohorts/${assignment.cohortId}`, {
+    const response = await axios(`/api/admin/cohorts/${cohortId}`, {
       method: 'put',
       withCredentials: true,
-      data: { activeTopicId: assignment.topicId } 
+      data: { topicId } 
     });
     dispatch(fetchCourses());
   };
@@ -176,13 +177,13 @@ export const fetchPromptAttempts = ()=> {
   };
 };
 
-export const fetchCohorts = ()=> {
+export const fetchEnrollments = ()=> {
   return async(dispatch)=> {
-    const response = await axios('/api/cohorts', {
+    const response = await axios('/api/enrollments', {
       method: 'get',
       withCredentials: true
     });
-    dispatch({ type: 'SET_COHORTS', cohorts: response.data });
+    dispatch({ type: 'SET_ENROLLMENTS', enrollments: response.data });
   };
 };
 
@@ -255,9 +256,9 @@ const promptAttempts = (state = [], action)=> {
   return state;
 };
 
-const cohorts = (state = [], action)=> {
-  if(action.type === 'SET_COHORTS'){
-    return action.cohorts;
+const enrollments = (state = [], action)=> {
+  if(action.type === 'SET_ENROLLMENTS'){
+    return action.enrollments;
   }
   return state;
 };
@@ -279,7 +280,7 @@ const admin = combineReducers({
 const reducer = combineReducers({
   auth,
   admin,
-  cohorts,
+  enrollments,
   promptAttempts,
   feedbacks
 });

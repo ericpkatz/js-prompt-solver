@@ -4,7 +4,7 @@ import { addEnrollment } from '../../store';
 
 const AddEnrollment = ({ cohort })=> {
   const { admin : { courses, users, promptAttempts } } = useSelector(state => state);
-  const notEnrolled = users.filter( user => !cohort.users.find(u => u.id === user.id));
+  const notEnrolled = users.filter( user => !cohort.enrollments.map( enrollment => enrollment.user ).find( u => u.id === user.id));
   const dispatch = useDispatch();
   const create = (userId)=> {
     if(userId){

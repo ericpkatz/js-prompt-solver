@@ -12,7 +12,6 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   useEffect(()=> {
     if(elScaffold){
-      console.log(elScaffold);
       const _editor = CodeMirror(elScaffold, {
         value: (codePrompt && codePrompt.scaffold) ? codePrompt.scaffold.trim() : '', 
         lineNumbers: false,
@@ -25,19 +24,23 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   }, [elScaffold]);
 
   useEffect(()=> {
-    if(el){
+    if(el && !editor){
       const _editor = CodeMirror(el, {
         value: promptAttempt.attempt || '', 
         lineNumbers: true,
         language: 'javascript'
       });
+      console.log(codePrompt.id, 'create');
       setEditor(_editor);
       _editor.on('change', ev => {
         setAttempt(ev.getValue());
-        
       });
     }
-  }, [el]);
+    if(editor && promptAttempt.attempt){
+      editor.setValue(promptAttempt.attempt);
+    }
+  }, [el, promptAttempt, editor]);
+
   const [attempt, setAttempt] = useState(promptAttempt.attempt || '');
 
   const _executeCode = ()=> {
@@ -51,7 +54,6 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
-  console.log(codePrompt);
 
   return (
     <div>

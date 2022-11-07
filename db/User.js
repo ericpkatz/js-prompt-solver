@@ -64,7 +64,7 @@ User.prototype.attemptPrompt = async function(promptAttempt){
   if(await !this.isYourEnrollment(promptAttempt.enrollmentId)){
     throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${promptAttempt.enrollmentId}`);
   }
-  //TODO - make sure it is your enrollment!
+
   if(!promptAttempt.id){
     return conn.models.promptAttempt.create(promptAttempt);
   }
@@ -129,6 +129,7 @@ User.prototype.isYourEnrollment = function(enrollmentId){
   });
 }
 
+/*
 User.prototype.getPromptAttempts = async function(){
   const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );
   return conn.models.promptAttempt.findAll({
@@ -144,6 +145,7 @@ User.prototype.getPromptAttempts = async function(){
   });
   return cohorts
 };
+*/
 
 User.prototype.getFeedbacks = async function(){
   const enrollmentIds = (await this.getCohorts()).map( cohort => cohort.enrollment.id );

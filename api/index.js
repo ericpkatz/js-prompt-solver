@@ -1,38 +1,10 @@
 const app = require('express').Router();
 const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { isLoggedIn, isAdmin } = require('./middleware');
 
 module.exports = app;
 
-const isLoggedIn = async(req, res,next)=> {
-  try {
-    if(!req.cookies.authorization || req.cookies.authorization === 'deleted'){
-      const error = new Error('not authorized');
-      error.status = 401;
-      throw error;
-    }
-    const user = await User.byToken(req.cookies.authorization); 
-    if(!user){
-      const error = new Error('not authorized');
-      error.status = 401;
-      throw error;
-    }
-    req.user = user;
-    next();
-  }
-  catch(ex){
-    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/; Max-Age=0;`);
-    next(ex);
-  }
-};
-
-const isAdmin = async(req, res, next)=> {
-  if(req.user && req.user.isAdmin){
-    return next();
-  }
-  const error = new Error('not authorized');
-  error.status = 401;
-  next(error);
-};
+app.use('/admin', isLoggedIn, isAdmin, require('./admin'));
 
 app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   try{
@@ -43,17 +15,35 @@ app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   }
 });
 
-app.get('/cohorts', isLoggedIn, async(req, res, next)=> {
+app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
   try{
-    res.send(await req.user.getCohorts({
+    const enrollments = await Enrollment.findAll({
+      where: {
+        userId: req.user.id,
+      },
       include: [
-        Course,
         {
-          model: Topic,
-          as: 'activeTopic'
+          model: PromptAttempt
+        },
+        {
+          model: Cohort,
+          include: [
+            {
+              model: Course
+            },
+            {
+              model: Topic,
+              include: [
+                {
+                  model: CodePrompt
+                }
+              ]
+            }
+          ]
         }
       ]
-    }));
+    });
+    res.send(enrollments);
   }
   catch(ex){
     next(ex);
@@ -89,150 +79,6 @@ app.put('/feedbacks/:id', isLoggedIn, async(req, res, next)=> {
     res.send(feedback);
   }
   catch(ex){
-    next(ex);
-  }
-});
-
-/*
-app.get('/prompts', isLoggedIn, async(req, res, next)=> {
-  try{
-    res.send(await req.user.attemptPrompt(req.body));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-*/
-
-app.get('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await User.findAll());
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.get('/admin/topics', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await Topic.findAll({
-      include: [{
-        model: CodePrompt,
-        include: [
-          { model: Test }
-        ]
-      }]
-    }));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.post('/admin/users', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await User.create(req.body));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.put('/admin/cohorts/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    const cohort = await Cohort.findByPk(req.params.id);
-    await cohort.update(req.body);
-    res.send(cohort);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.post('/admin/cohorts', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await Cohort.create(req.body));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.post('/admin/enrollments', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await Enrollment.create(req.body));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.delete('/admin/cohorts/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    const cohort = await Cohort.findByPk(req.params.id);
-    await cohort.destroy();
-    res.sendStatus(201);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.delete('/admin/users/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    const user = await User.findByPk(req.params.id);
-    await user.destroy();
-    res.sendStatus(201);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.delete('/admin/enrollments/:id', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    const enrollment = await Enrollment.findByPk(req.params.id);
-    await enrollment.destroy();
-    res.sendStatus(201);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.get('/admin/courses', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await Course.findAll({
-      include: [
-        {
-          model: Cohort,
-          include: [
-            {
-              model: User
-            },
-            {
-              model: Topic,
-              as: 'activeTopic'
-            }
-          ]
-        }
-      ]
-    }));
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.get('/admin/promptAttempts', isLoggedIn, isAdmin, async(req, res, next)=> {
-  try {
-    res.send(await PromptAttempt.findAll({
-      include: [
-      ]
-    }));
-  }
-  catch(ex){
-    res.setHeader('Set-Cookie', `authorization=deleted; HttpOnly; path=/`);
     next(ex);
   }
 });

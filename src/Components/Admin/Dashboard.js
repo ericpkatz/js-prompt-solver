@@ -31,14 +31,13 @@ const AdminDashboard = ()=> {
                           <AddEnrollment cohort={ cohort }/>
                           <ul>
                             {
-                              cohort.users.map( user => {
-                                const _promptAttempts = promptAttempts.filter( promptAttempt => promptAttempt.enrollmentId === user.enrollment.id);
+                              cohort.enrollments.map( ({ user, id, promptAttempts }) => {
                                 return (
                                   <li key={ user.id }>
                                     {
                                       user.login
-                                    } ({ _promptAttempts.length })
-                                    <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteEnrollment(user.enrollment.id))}>x</button>
+                                    } ({ promptAttempts.length })
+                                    <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteEnrollment(id))}>x</button>
                                   </li>
                                 );
                               })

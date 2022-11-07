@@ -4,24 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchAssignments } from '../store';
 
 const Home = ()=> {
-  const { promptAttempts, codePrompts, auth, cohorts, assignments } = useSelector(state => state);
+  const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
 
   return (
       <div>
       {
-        cohorts.map( cohort => {
-          const filteredAssignments = assignments
-            .filter(assignment => assignment.cohortId === cohort.id)
-            .filter(({ due, assigned }) => {
-              const now = new Date();
-              return now > new Date(assigned) && now < new Date(due); 
-            });
-          let shown = false;
+        enrollments.map( enrollment => {
           return (
-            <div key={ cohort.id}>
-              <h2><Link to={`/cohorts/${cohort.id}`}>{ cohort.name } { cohort.course.title }</Link></h2>
+            <div key={ enrollment.id}>
+              <h2><Link to={`/cohorts/${enrollment.id}`}>{ enrollment.cohort.name } { enrollment.cohort.course.title }</Link></h2>
               <div>
-                { cohort.course.description }
+                { enrollment.cohort.course.description }
               </div>
             </div>
           );

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { clear, attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, fetchFeedbacks, fetchAdmin} from '../store';
+import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
 import PromptAttempt from './PromptAttempt';
@@ -29,7 +29,10 @@ const App = ()=> {
   const prev = usePrevious(auth);
 
   useEffect(()=> {
-    dispatch(attemptLogin());
+    dispatch(attemptLogin())
+      .catch(ex => {
+        navigate('/');
+      });
   }, []);
 
   useEffect(()=> {
@@ -37,9 +40,9 @@ const App = ()=> {
       dispatch(fetchAdmin());
     }
     if(auth.id){
-      dispatch(fetchCohorts());
-      dispatch(fetchPromptAttempts());
-      dispatch(fetchFeedbacks());
+      dispatch(fetchEnrollments());
+      //dispatch(fetchPromptAttempts());
+      //dispatch(fetchFeedbacks());
     }
     if(prev && prev.id && !auth.id){
       dispatch(clear(navigate));
