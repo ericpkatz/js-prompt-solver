@@ -35,7 +35,10 @@ app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
               model: Topic,
               include: [
                 {
-                  model: CodePrompt
+                  model: CodePrompt,
+                  include: [
+                    Test
+                  ]
                 }
               ]
             }

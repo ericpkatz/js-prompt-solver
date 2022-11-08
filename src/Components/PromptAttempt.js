@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
 
 const PromptAttempt = ({ promptAttempt, codePrompt })=> {
-  console.log(codePrompt);
   const [el, setEl] = useState(null);
   const [elScaffold, setElScaffold] = useState(null);
   const [elScaffoldAfter, setElScaffoldAfter] = useState(null);
@@ -43,7 +42,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   useEffect(()=> {
     if(el){
       const _editor = CodeMirror(el, {
-        value: promptAttempt.attempt || '', 
+        value: promptAttempt.attempt || '//your code here', 
         lineNumbers: true,
         language: 'javascript'
       });
@@ -57,9 +56,9 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const [attempt, setAttempt] = useState(promptAttempt.attempt || '');
 
-  const _executeCode = ()=> {
+  const _executeCode = (test)=> {
     const logger = _logger(_console);
-    executeCode(`${codePrompt.scaffold};${editor.getValue()};${codePrompt.scaffoldAfter}`, logger, JSHINT);
+    executeCode(`${codePrompt.scaffold};${editor.getValue()};${codePrompt.scaffoldAfter};${ test || ''}`, logger, JSHINT);
   }
 
   const save = ev => {
@@ -68,6 +67,18 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
+  const runTest = (idx)=> {
+    const { input, output, operator, outputDataType } = codePrompt.tests[idx];
+    const code = `
+if(${input} ${operator === 'EQUALS' ? '===' : ''} ${output}){
+  console.log('test passes');
+}
+else {
+  console.log('test does not pass');
+}
+    `;
+    _executeCode(code);
+  };
 
   return (
     <div>
@@ -79,11 +90,36 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
         <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
-        <div>
-          <button id='run' disabled={!attempt}>Run Your Code</button>
-          <button id='submit' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
+        <div className='mt-2'>
+          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt}>Run and Save Your Code</button>
+          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
         </div>
       </form>
+      <div id='tests'>
+      {
+        codePrompt.tests.map( (test, idx) => {
+          return (
+            <div className='test mb-2' key={ test.id }>
+              <div>
+                { test.input }
+              </div>
+              <div>
+                { test.operator }
+              </div>
+              <div>
+                { test.output }
+              </div>
+              <div>
+                { test.outputDataType }
+              </div>
+              <div>
+                <button onClick={ ()=> runTest(idx)} className='btn btn-primary btn-sm'>Run Test</button>
+              </div>
+            </div>
+          );
+        })
+      }
+      </div>
     </div>
   );
 };

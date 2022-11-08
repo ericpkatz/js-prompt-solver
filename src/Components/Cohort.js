@@ -33,6 +33,7 @@ const Cohort = ()=> {
                       .sort((a, b)=> a.rank - b.rank)
                       .map( codePrompt => {
                         const promptAttempt = enrollment.promptAttempts
+                          .filter(promptAttempt => !promptAttempt.archived)
                           .find(promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {
                             codePromptId: codePrompt.id, enrollmentId: enrollment.id }
                         if(shown || promptAttempt.submitted){
