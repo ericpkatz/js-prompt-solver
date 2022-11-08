@@ -18,7 +18,7 @@ function usePrevious(value) {
 }
 
 const App = ()=> {
-  const { promptAttempts, codePrompts, auth, cohorts, assignments } = useSelector(state => state);
+  const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
   const isAdmin = auth.isAdmin;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ const App = ()=> {
           !auth.id && <a href={`https://github.com/login/oauth/authorize?client_id=${window.GITHUB_CLIENT_ID}`}>Login with your Github Account</a>
         }
         {
-          !!auth.id && !isAdmin && !cohorts.length && <div>You have no enrollments.</div>
+          !!auth.id && !isAdmin && !enrollments.length && <div>You have no enrollments.</div>
         }
         <Routes>
           <Route path='/' element={ <Home /> } />
