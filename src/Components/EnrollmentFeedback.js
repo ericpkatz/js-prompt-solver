@@ -24,6 +24,7 @@ const EnrollmentFeedback = ()=> {
               <h3>Your Prompt Attempts</h3>
                 {
                   enrollment.promptAttempts
+                    .filter(promptAttempt => promptAttempt.submitted)
                     .sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt))
                     .map( promptAttempt => {
                       return (
@@ -35,7 +36,7 @@ const EnrollmentFeedback = ()=> {
                             TODO - show folks who reviewed you ({ promptAttempt.feedbacks.length })
                           </div>
                           <div>
-                            Ask to Review a peers work
+                            <Link to={`/promptAttempts/${promptAttempt.id}/provideFeedback`}>Review this Code Prompt</Link>
                           </div>
                         </div>
                       );

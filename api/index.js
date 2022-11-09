@@ -1,5 +1,6 @@
 const app = require('express').Router();
-const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback } = require('../db');
+const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback } = require('../db');
+const { Op } = conn.Sequelize; 
 const { isLoggedIn, isAdmin } = require('./middleware');
 
 module.exports = app;
@@ -74,6 +75,38 @@ app.put('/enrollments/:enrollmentId/topics/:topicId', isLoggedIn, async(req, res
 app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getPromptAttempts());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)=> {
+  try{
+    const promptAttempt = await PromptAttempt.findByPk(req.params.id);
+    const enrollments = (await Enrollment.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })).map( enrollment => enrollment.id);
+    if(!enrollments.includes(promptAttempt.enrollmentId) || !promptAttempt.submitted){
+      const error = Error('prompt attempt must be yours and submitted in order to provide feedback');
+      error.status = 401;
+      throw error;
+    }
+    const otherPromptAttempts = await PromptAttempt.findAll({
+      where: {
+        codePromptId: promptAttempt.codePromptId,
+        submitted: true,
+        enrollmentId: {
+          [Op.ne] : promptAttempt.enrollmentId
+        }
+      }
+    });
+    res.send({
+      promptAttempt,
+      otherPromptAttempts
+    });
   }
   catch(ex){
     next(ex);
