@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback } = require('../db');
 const { isLoggedIn, isAdmin } = require('./middleware');
 
 module.exports = app;
@@ -23,7 +23,15 @@ app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
       },
       include: [
         {
-          model: PromptAttempt
+          model: PromptAttempt,
+          include: [
+            {
+              model: CodePrompt,
+            },
+            {
+              model: Feedback,
+            }
+          ]
         },
         {
           model: Cohort,

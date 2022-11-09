@@ -5,7 +5,7 @@ import { attemptLogin, logout, fetchCourses, fetchCohorts, fetchPromptAttempts, 
 import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 
-const Cohort = ()=> {
+const Enrollment = ()=> {
   const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ const Cohort = ()=> {
   return (
             <div key={ cohort.id}>
               <h2>{ cohort.name } { cohort.course.title }</h2>
-              <Link to={`/cohorts/${cohort.id}/feedback`}>Feedback</Link>
               <div>
                 {
                   !cohort.topic && <div>You have no assignments</div> 
@@ -59,4 +58,4 @@ const Cohort = ()=> {
           );
 };
 
-export default Cohort;
+export default Enrollment;

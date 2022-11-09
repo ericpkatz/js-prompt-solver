@@ -148,5 +148,6 @@ module.exports = {
   Cohort,
   PromptAttempt,
   syncAndSeed,
-  Test
+  Test,
+  Feedback
 };

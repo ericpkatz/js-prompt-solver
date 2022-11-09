@@ -5,7 +5,8 @@ import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromp
 import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
 import PromptAttempt from './PromptAttempt';
-import Cohort from './Cohort';
+import Enrollment from './Enrollment';
+import EnrollmentFeedback from './EnrollmentFeedback';
 import Home from './Home';
 import Feedback from './Feedback';
 
@@ -55,9 +56,7 @@ const App = ()=> {
         !!auth.id && (
           <nav>
             <Link to='/'>Home</Link>
-            {
-              auth.isAdmin && <Link to='/admin'>Admin</Link>
-            }
+            <Link to='/feedback'>Feedback</Link>
           </nav>
         )
       }
@@ -70,6 +69,9 @@ const App = ()=> {
                 <label className='pe-3'>
                 Welcome { auth.login }!
                 </label>
+            {
+              auth.isAdmin && <Link className='me-3' to='/admin'>Admin</Link>
+            }
                 <button className='btn btn-primary btn-sm' onClick={ _logout }>Logout</button>
               </div>
             )
@@ -85,8 +87,9 @@ const App = ()=> {
           <Route path='/' element={ <Home /> } />
           <Route path='/admin' element={ <AdminDashboard /> } />
           <Route path='/admin/courses/:id' element={ <AdminCourse /> } />
-          <Route path='/cohorts/:id' element={ <Cohort /> } />
-          <Route path='/cohorts/:id/feedback' element={ <Feedback /> } />
+          <Route path='/enrollments/:id' element={ <Enrollment /> } />
+          <Route path='/feedback' element={ <Feedback /> } />
+          <Route path='/enrollments/:id/feedback' element={ <EnrollmentFeedback /> } />
         </Routes>
       </main>
     </div>
