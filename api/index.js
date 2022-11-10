@@ -81,9 +81,50 @@ app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.post('/promptAttempts/:id/feedbacks', isLoggedIn, async(req, res, next)=> {
+  try{
+    //GET the promptAttempt
+    const promptAttempt = await PromptAttempt.findByPk(req.params.id, {
+      include: [
+        {
+          model: Enrollment
+        }
+      ]
+    });
+    const enrollment = await Enrollment.findOne({
+      where: {
+        userId: req.user.id,
+        cohortId: promptAttempt.enrollment.cohortId
+      }
+    });
+    const feedback = await Feedback.create({
+      ...req.body,
+      enrollmentId: enrollment.id,
+      promptAttemptId: req.params.id
+    });
+    res.send(feedback);
+    //GET the enrollment and cohort for the prompt attempt
+    //GET your enrollment for that cohort
+    //CREATE the feedback with your enrollment and the comments
+
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)=> {
   try{
-    const promptAttempt = await PromptAttempt.findByPk(req.params.id);
+    const promptAttempt = await PromptAttempt.findByPk(req.params.id, {
+      include: [
+        {
+          model: Enrollment
+        },
+        {
+          model: CodePrompt
+        }
+      ]
+    });
     const enrollments = (await Enrollment.findAll({
       where: {
         userId: req.user.id
@@ -94,15 +135,32 @@ app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)
       error.status = 401;
       throw error;
     }
+
     const otherPromptAttempts = await PromptAttempt.findAll({
       where: {
         codePromptId: promptAttempt.codePromptId,
         submitted: true,
+        archived: false,
         enrollmentId: {
           [Op.ne] : promptAttempt.enrollmentId
         }
-      }
+      },
+      include: [
+        {
+          model: Feedback
+        },
+        {
+          model: Enrollment,
+          required: true,//not sure I need this
+          where: {
+            cohortId: promptAttempt.enrollment.cohortId
+          }
+        }
+      ]
     });
+    //have I provided feedback already?
+    //should we not look at promptAttempts which have been archived
+    //has any feedbacks been provided?
     res.send({
       promptAttempt,
       otherPromptAttempts
