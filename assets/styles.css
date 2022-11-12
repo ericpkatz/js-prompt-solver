@@ -3,6 +3,10 @@ body {
   margin: 0;
 }
 
+h2 {
+  text-transform: uppercase;
+}
+
 nav {
   display: flex;
   justify-content: space-around;
@@ -30,7 +34,7 @@ main {
 section#welcome {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 #ide {
@@ -111,4 +115,9 @@ section#welcome {
 }
 .test > *{
   flex: 1;
+}
+
+pre {
+  background-color: gainsboro;
+  padding: 0.5rem;
 }

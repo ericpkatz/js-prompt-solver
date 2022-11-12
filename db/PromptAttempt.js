@@ -6,6 +6,7 @@ const PromptAttempt = conn.define('promptAttempt', {
   id,
   attempt: {
     type: TEXT,
+    allowNull: false
   },
   enrollmentId: {
     type: UUID,

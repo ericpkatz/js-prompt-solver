@@ -1,7 +1,7 @@
 const { JWT } = process.env;
 const conn = require('./conn');
 const { id } = require('./common');
-const { Op, STRING, JSON, BOOLEAN } = conn.Sequelize;
+const { VIRTUAL, Op, STRING, JSON, BOOLEAN } = conn.Sequelize;
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
@@ -25,6 +25,12 @@ const User = conn.define('user', {
     type: BOOLEAN,
     defaultValue: false,
     allowNull: false
+  },
+  token: {
+    type: VIRTUAL,
+    get: function(){
+      return this.generateToken();
+    }
   }
 });
 

@@ -56,17 +56,16 @@ const App = ()=> {
       {
         !!auth.id && (
           <nav>
-            <Link to='/'>Home</Link>
+            <Link to='/'>JS Prompt Solver</Link>
             <Link to='/feedback'>Feedback</Link>
           </nav>
         )
       }
       <main>
         <section id='welcome'>
-          <h1>Welcome to JS Prompt Solver</h1>
           {
             !!auth.id && (
-              <div>
+              <div className='mt-3'>
                 <label className='pe-3'>
                 Welcome { auth.login }!
                 </label>

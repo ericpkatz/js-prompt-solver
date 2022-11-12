@@ -9,6 +9,18 @@ app.use('/dist', express.static('dist'));
 app.use('/assets', express.static('assets'));
 app.use('/api', require('./api'));
 
+//TODO mark for development only
+app.get('/login/:token', (req, res, next)=> {
+  try {
+    res.setHeader('Set-Cookie', `authorization=${req.params.token}; HttpOnly ; path=/`);
+    res.redirect('/');
+  }
+  catch(ex){
+    next(ex);
+  }
+
+});
+
 app.get('/', (req, res, next)=> res.render(path.join(__dirname, 'index.html'), {
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID
 }));

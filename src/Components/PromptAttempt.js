@@ -63,6 +63,11 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const save = ev => {
     ev.preventDefault();
+    const idx = document.activeElement.getAttribute('data-idx'); 
+    if(idx){
+      runTest(idx*1);
+      return;
+    }
     _executeCode();
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
@@ -90,11 +95,6 @@ else {
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
         <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
-        <div className='mt-2'>
-          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt}>Run and Save Your Code</button>
-          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
-        </div>
-      </form>
       <div id='tests'>
       {
         codePrompt.tests.map( (test, idx) => {
@@ -113,13 +113,21 @@ else {
                 { test.outputDataType }
               </div>
               <div>
-                <button onClick={ ()=> runTest(idx)} className='btn btn-primary btn-sm'>Run Test</button>
+                <button onClick={ ()=> runTest(idx)} className='btn btn-primary btn-sm btn-test' data-idx={ idx }>Run Test</button>
               </div>
             </div>
           );
         })
       }
+      <div>
+        Enable Student to create a test
       </div>
+      </div>
+        <div className='mt-2'>
+          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt || attempt === '//your code here'}>Run and Save Your Code</button>
+          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
+        </div>
+      </form>
     </div>
   );
 };

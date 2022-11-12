@@ -141,6 +141,34 @@ app.put('/promptAttempts/:promptAttemptId/feedbacks/:id', isLoggedIn, async(req,
   }
 });
 
+app.delete('/promptAttempts/:promptAttemptId/feedbacks/:id', isLoggedIn, async(req, res, next)=> {
+  try{
+    //GET the promptAttempt
+    const promptAttempt = await PromptAttempt.findByPk(req.params.promptAttemptId, {
+      include: [
+        {
+          model: Enrollment
+        }
+      ]
+    });
+    const enrollment = await Enrollment.findOne({
+      where: {
+        userId: req.user.id,
+        cohortId: promptAttempt.enrollment.cohortId
+      }
+    });
+    const feedback = await Feedback.findByPk(req.params.id, {
+      enrollmentId: enrollment.id,
+      promptAttemptId: req.params.promptAttemptId
+    });
+    await feedback.destroy(); 
+    res.sendStatus(204);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)=> {
   try{
     const promptAttempt = await PromptAttempt.findByPk(req.params.id, {

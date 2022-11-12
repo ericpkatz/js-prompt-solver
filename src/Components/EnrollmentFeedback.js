@@ -40,9 +40,12 @@ const EnrollmentFeedback = ()=> {
                               promptAttempt.feedbacks.map( feedback => {
                                 return (
                                   <div>
+                                  <pre>
                                     {
                                       feedback.comments
                                     }
+                                  </pre>
+                                  <button className='btn btn-primary'>Acknowledge Feedback</button>
                                   </div>
                                 );
                               })
@@ -51,7 +54,7 @@ const EnrollmentFeedback = ()=> {
                           <div>
                             <Link to={`/promptAttempts/${promptAttempt.id}/provideFeedback`}>Review this Code Prompt</Link>
                           </div>
-                          <h5>Previous Attempts</h5>
+                        {!!archivedAttempts.length && <h5>Previous Attempts</h5> }
                           {
                             archivedAttempts.map( promptAttempt => {
                               return (

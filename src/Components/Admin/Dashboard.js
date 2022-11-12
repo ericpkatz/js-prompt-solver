@@ -69,6 +69,9 @@ const AdminDashboard = ()=> {
             return (
               <li key={ user.id }>
                 <Link to={`/admin/users/${user.id}`}>{ user.login }</Link>
+                <pre>
+                  <a href={`/login/${user.token}`}>login</a>
+                </pre>
                 <button className='ms-2 btn btn-danger btn-sm' onClick={ ()=> dispatch(deleteUser(user)) }>x</button>
               </li>
             )

@@ -8,6 +8,7 @@ const Cohort = require('./Cohort');
 const PromptAttempt = require('./PromptAttempt');
 const Feedback = require('./Feedback');
 const Test = require('./Test');
+const StudentTest = require('./StudentTest');
 
 Enrollment.belongsTo(User);
 Enrollment.belongsTo(Cohort);
@@ -38,6 +39,8 @@ Feedback.belongsTo(Enrollment);
 PromptAttempt.hasMany(Feedback);
 
 CodePrompt.hasMany(Test);
+PromptAttempt.hasMany(StudentTest);
+StudentTest.belongsTo(PromptAttempt);
 
 const syncAndSeed = async()=> {
   await conn.sync({ force: true });

@@ -1,32 +1,63 @@
 module.exports = {
   title: 'Introduction to JavaScript',
+  cohorts: [
+    {
+      name: 'Cohort A',
+      topic: 'Introduction to functions',
+      enrollments: [
+        {
+          login: 'moe',
+          promptAttempts: [
+            {
+              title: 'the add function with two numbers',
+              attempt: 
+`function add(){
+  return a + b;
+}
+              `,
+              submitted: true
+            },
+          ]
+        },
+        {
+          login: 'larry',
+          promptAttempts: [
+            {
+              title: 'the add function with two numbers',
+              attempt: `
+const add = (a, b)=> {
+  return a + b;
+}
+              `,
+            submitted: true
+            },
+          ]
+        },
+        {
+          login: 'curly'
+        },
+      ]
+    },
+  ],
   topics: [
     {
       title: 'Introduction to functions',
       codePrompts: [
         {
-          title: 'Write a function which adds two numbers',
+          title: 'the add function with two numbers',
           rank: 1,
-          scaffold: `
-const a = 2;
-const b = 3;
-const c = 1;`,
-          scaffoldAfter: `
-const result1 = add(a, b);
-const result2 = add(b, c);
-console.log(result1);
-console.log(result2);
-`,
+          scaffold: ``,
+          scaffoldAfter: ``,
           tests: [
             {
-              input: 'result1',
+              input: 'add(2, 3)',
               output: '5',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             },
             {
-              input: 'result2',
-              output: '4',
+              input: 'add(3, 4)',
+              output: '7',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             }
