@@ -6,7 +6,7 @@ import AdminDashboard from './Admin/Dashboard';
 import PromptAttempt from './PromptAttempt';
 
 const Enrollment = ()=> {
-  const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
+  const { promptAttempts, codePrompts, auth, enrollments, assignments, feedbacksTo, availableFeedbackMap } = useSelector(state => state);
   const { id } = useParams();
   const dispatch = useDispatch();
   const enrollment = enrollments.find( enrollment => enrollment.id === id );
@@ -14,7 +14,7 @@ const Enrollment = ()=> {
     return null;
   }
   const cohort = enrollment.cohort; 
-  console.log(enrollment);
+  const unreviewedFeedback = feedbacksTo.filter(feedback=> !feedback.reviewed && feedback.promptAttempt.enrollment.id === enrollment.id);
   let shown = false;
   //todo - get unacknowledged feedbacks
   return (
@@ -24,6 +24,21 @@ const Enrollment = ()=> {
                 {
                   !cohort.topic && <div>You have no assignments</div> 
                 }
+    <pre>
+{ JSON.stringify(availableFeedbackMap, null, 2) }
+    </pre>
+                <div>
+                {
+                  unreviewedFeedback.map( feedback=> {
+                    return (
+                      <div className='alert alert-primary' key={ feedback.id }>
+                        You have <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> to review for <strong>{ feedback.promptAttempt.codePrompt.title }</strong>
+
+                      </div>
+                    );
+                  })
+                }
+                </div>
                 
                 <ul>
                   {

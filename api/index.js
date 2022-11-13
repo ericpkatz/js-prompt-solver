@@ -16,6 +16,108 @@ app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.get('/feedbacks/availableFeedbackMap', isLoggedIn, async(req, res, next)=> {
+  try{
+    const promptAttempts = await PromptAttempt.findAll({
+      where: {
+        submitted: true,
+        archived: false
+      },
+      include: [
+        {
+          model: Enrollment,
+          where: {
+            userId: req.user.id
+          }
+        }
+      ]
+    });
+    const codePromptIds = promptAttempts.map(promptAttempt => promptAttempt.codePromptId);
+    const otherCodePrompts = await PromptAttempt.findAll({
+      where: {
+        submitted: true,
+        codePromptId: {
+          [Op.in]:  promptAttempts.map(promptAttempt => promptAttempt.codePromptId)
+        },
+      },
+      include: [
+        {
+          model: Enrollment,
+          where: {
+            userId: {
+              [Op.ne]: req.user.id
+            }
+          },
+          include: [
+            User
+          ]
+        }
+      ]
+    });
+    res.send(otherCodePrompts);
+    /*
+    const feedback = await Feedback.findAll({
+      include: [
+        {
+          model: PromptAttempt,
+          include: [
+            {
+              model: CodePrompt
+            },
+            {
+              model: Enrollment,
+              include: [
+                {
+                  model: User,
+                  where: {
+                    id: req.user.id
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+    res.send(feedback);
+    */
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+app.get('/feedbacks/to', isLoggedIn, async(req, res, next)=> {
+  try{
+    const feedback = await Feedback.findAll({
+      include: [
+        {
+          model: PromptAttempt,
+          include: [
+            {
+              model: CodePrompt
+            },
+            {
+              model: Enrollment,
+              include: [
+                {
+                  model: User,
+                  where: {
+                    id: req.user.id
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+    res.send(feedback);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
   try{
     const enrollments = await Enrollment.findAll({
@@ -113,6 +215,35 @@ app.post('/promptAttempts/:id/feedbacks', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.put('/feedbacks/to/:id/markAsReviewed', isLoggedIn, async(req, res, next)=> {
+  try{
+    const feedback = await Feedback.findByPk(req.params.id, {
+        include: [
+          { 
+            model: PromptAttempt,
+            include: [
+              {
+                model: Enrollment,
+                include: [
+                  {
+                    model: User,
+                    where: {
+                      id: req.params.id
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+    });
+    await feedback.update({ reviewed: true });
+    res.send(feedback);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
 app.put('/promptAttempts/:promptAttemptId/feedbacks/:id', isLoggedIn, async(req, res, next)=> {
   try{
     //GET the promptAttempt

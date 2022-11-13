@@ -34,6 +34,7 @@ const PromptAttempt = conn.define('promptAttempt', {
   }//not sure about this
 });
 
+
 PromptAttempt.addHook('beforeSave', async(promptAttempt)=> {
   if(promptAttempt.isNewRecord && !!(await PromptAttempt.findOne({
     where: {

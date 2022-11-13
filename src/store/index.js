@@ -53,13 +53,33 @@ export const fetchEnrollments = ()=> {
   };
 };
 
-export const fetchFeedbacks = ()=> {
+export const fetchFeedbacksTo = ()=> {
   return async(dispatch)=> {
-    const response = await axios('/api/feedbacks', {
+    const response = await axios('/api/feedbacks/to', {
       method: 'get',
       withCredentials: true
     });
-    dispatch({ type: 'SET_FEEDBACKS', feedbacks: response.data });
+    dispatch({ type: 'SET_FEEDBACKS_TO', feedbacks: response.data });
+  };
+};
+
+export const fetchAvailableFeedbackMap = ()=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/feedbacks/availableFeedbackMap', {
+      method: 'get',
+      withCredentials: true
+    });
+    dispatch({ type: 'SET_AVAILABLE_FEEDBACK_MAP', availableFeedbackMap: response.data });
+  };
+};
+
+export const markAsReviewed = (feedback)=> {
+  return async(dispatch)=> {
+    const response = await axios(`/api/feedbacks/to/${ feedback.id }/markAsReviewed`, {
+      method: 'put',
+      withCredentials: true
+    });
+    dispatch(fetchFeedbacksTo());
   };
 };
 
@@ -119,9 +139,23 @@ const enrollments = (state = [], action)=> {
   return state;
 };
 
-const feedbacks = (state = [], action)=> {
-  if(action.type === 'SET_FEEDBACKS'){
+const feedbacksTo = (state = [], action)=> {
+  if(action.type === 'SET_FEEDBACKS_TO'){
     return action.feedbacks;
+  }
+  return state;
+};
+
+const feedbacksFrom = (state = [], action)=> {
+  if(action.type === 'SET_FEEDBACKS_TO'){
+    return action.feedbacks;
+  }
+  return state;
+};
+
+const availableFeedbackMap = (state = [], action)=> {
+  if(action.type === 'SET_AVAILABLE_FEEDBACK_MAP'){
+    return action.availableFeedbackMap;
   }
   return state;
 };
@@ -130,7 +164,8 @@ const reducer = combineReducers({
   auth,
   admin,
   enrollments,
-  feedbacks
+  feedbacksTo,
+  availableFeedbackMap
 });
 
 const store = createStore(reducer, applyMiddleware(thunk, logger));

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin} from '../store';
+import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin, fetchFeedbacksTo, fetchAvailableFeedbackMap} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
 import PromptAttempt from './PromptAttempt';
@@ -9,6 +9,7 @@ import Enrollment from './Enrollment';
 import EnrollmentFeedback from './EnrollmentFeedback';
 import Home from './Home';
 import Feedback from './Feedback';
+import FeedbackTo from './FeedbackTo';
 import ProvideFeedback from './ProvideFeedback';
 
 function usePrevious(value) {
@@ -43,6 +44,8 @@ const App = ()=> {
     }
     if(auth.id){
       dispatch(fetchEnrollments());
+      dispatch(fetchFeedbacksTo());
+      dispatch(fetchAvailableFeedbackMap());
       //dispatch(fetchPromptAttempts());
       //dispatch(fetchFeedbacks());
     }
@@ -90,6 +93,7 @@ const App = ()=> {
           <Route path='/enrollments/:id' element={ <Enrollment /> } />
           <Route path='/feedback' element={ <Feedback /> } />
           <Route path='/enrollments/:id/feedback' element={ <EnrollmentFeedback /> } />
+          <Route path='/enrollments/:id/feedbacks/:promptAttemptId' element={ <FeedbackTo /> } />
           <Route path='/promptAttempts/:id/provideFeedback' element={ <ProvideFeedback /> } />
         </Routes>
       </main>
