@@ -4,6 +4,18 @@ module.exports = {
     {
       name: 'Cohort A',
       topic: 'Introduction to functions',
+      reviews: [
+        {
+          from: 'larry',
+          to: 'moe',
+          title: 'the add function with two numbers',
+          comments: 
+`
+I think you are forgetting to put in parameters.
+You also need to return the result instead of console.logging.
+`
+        }
+      ], 
       enrollments: [
         {
           login: 'moe',

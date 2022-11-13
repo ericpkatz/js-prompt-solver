@@ -14,7 +14,9 @@ const Enrollment = ()=> {
     return null;
   }
   const cohort = enrollment.cohort; 
+  console.log(enrollment);
   let shown = false;
+  //todo - get unacknowledged feedbacks
   return (
             <div key={ cohort.id}>
               <h2>{ cohort.name } { cohort.course.title }</h2>

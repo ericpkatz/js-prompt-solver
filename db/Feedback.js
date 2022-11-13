@@ -14,6 +14,11 @@ const Feedback = conn.define('feedback', {
   },
   comments: {
     type: TEXT
+  },
+  reviewed: {
+    type: BOOLEAN,
+    defaultValue: false,
+    allowNull: false
   }
 });
 
