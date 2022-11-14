@@ -41,6 +41,8 @@ app.get('/feedbacks/availableFeedbackMap', isLoggedIn, async(req, res, next)=> {
         },
       },
       include: [
+        Feedback,
+        CodePrompt,
         {
           model: Enrollment,
           where: {

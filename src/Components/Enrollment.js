@@ -24,15 +24,24 @@ const Enrollment = ()=> {
                 {
                   !cohort.topic && <div>You have no assignments</div> 
                 }
-    <pre>
-{ JSON.stringify(availableFeedbackMap, null, 2) }
-    </pre>
                 <div>
                 {
                   unreviewedFeedback.map( feedback=> {
                     return (
                       <div className='alert alert-primary' key={ feedback.id }>
-                        You have <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> to review for <strong>{ feedback.promptAttempt.codePrompt.title }</strong>
+                        You have received <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> for <strong>{ feedback.promptAttempt.codePrompt.title }</strong>
+
+                      </div>
+                    );
+                  })
+                }
+                </div>
+                <div>
+                {
+                  availableFeedbackMap.map( promptAttempt => {
+                    return (
+                      <div className='alert alert-primary' key={ promptAttempt.id }>
+                        You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>leave</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>
 
                       </div>
                     );

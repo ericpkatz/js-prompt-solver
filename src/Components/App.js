@@ -11,6 +11,7 @@ import Home from './Home';
 import Feedback from './Feedback';
 import FeedbackTo from './FeedbackTo';
 import ProvideFeedback from './ProvideFeedback';
+import LeaveFeedback from './LeaveFeedback';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -94,6 +95,7 @@ const App = ()=> {
           <Route path='/feedback' element={ <Feedback /> } />
           <Route path='/enrollments/:id/feedback' element={ <EnrollmentFeedback /> } />
           <Route path='/enrollments/:id/feedbacks/:promptAttemptId' element={ <FeedbackTo /> } />
+          <Route path='/enrollments/:id/feedbacks/:promptAttemptId/leave' element={ <LeaveFeedback /> } />
           <Route path='/promptAttempts/:id/provideFeedback' element={ <ProvideFeedback /> } />
         </Routes>
       </main>

@@ -46,7 +46,18 @@ const add = (a, b)=> {
           ]
         },
         {
-          login: 'curly'
+          login: 'curly',
+          promptAttempts: [
+            {
+              title: 'the add function with two numbers',
+              attempt: `
+const add = (a, b) = {
+  console.log(a + b);
+}
+              `,
+            submitted: true
+            },
+          ]
         },
       ]
     },
