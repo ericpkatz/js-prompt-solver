@@ -124,7 +124,7 @@ else {
       </div>
       </div>
         <div className='mt-2'>
-          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt || attempt === '//your code here'}>Run and Save Your Code</button>
+          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt || attempt === '//your code here' || (promptAttempt && promptAttempt.attempt === attempt)}>Run and Save Your Code</button>
           <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
         </div>
       </form>

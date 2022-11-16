@@ -14,7 +14,8 @@ const Enrollment = ()=> {
     return null;
   }
   const cohort = enrollment.cohort; 
-  const unreviewedFeedback = feedbacksTo.filter(feedback=> !feedback.reviewed && feedback.promptAttempt.enrollment.id === enrollment.id);
+  console.log(feedbacksTo);
+  const unreviewedFeedback = feedbacksTo.filter(feedback=> !feedback.reviewed && feedback.promptAttempt.enrollmentId === enrollment.id);
   let shown = false;
   //todo - get unacknowledged feedbacks
   return (
@@ -39,6 +40,9 @@ const Enrollment = ()=> {
                 <div>
                 {
                   availableFeedbackMap.map( promptAttempt => {
+                    if(promptAttempt.feedbacks.find(feedback=> feedback.enrollmentId === enrollment.id)){
+                      return null;
+                    }
                     return (
                       <div className='alert alert-primary' key={ promptAttempt.id }>
                         You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>leave</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>

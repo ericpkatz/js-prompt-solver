@@ -61,7 +61,7 @@ const App = ()=> {
         !!auth.id && (
           <nav>
             <Link to='/'>JS Prompt Solver</Link>
-            <Link to='/feedback'>Feedback</Link>
+            <Link to='/history'>History</Link>
           </nav>
         )
       }
@@ -95,7 +95,7 @@ const App = ()=> {
           <Route path='/feedback' element={ <Feedback /> } />
           <Route path='/enrollments/:id/feedback' element={ <EnrollmentFeedback /> } />
           <Route path='/enrollments/:id/feedbacks/:promptAttemptId' element={ <FeedbackTo /> } />
-          <Route path='/enrollments/:id/feedbacks/:promptAttemptId/leave' element={ <LeaveFeedback /> } />
+          <Route path='/enrollments/:enrollmentId/feedbacks/:promptAttemptId/leave' element={ <LeaveFeedback /> } />
           <Route path='/promptAttempts/:id/provideFeedback' element={ <ProvideFeedback /> } />
         </Routes>
       </main>
