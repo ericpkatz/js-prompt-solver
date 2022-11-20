@@ -66,22 +66,25 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     const idx = document.activeElement.getAttribute('data-idx'); 
     if(idx){
       runTest(idx*1);
-      return;
     }
-    _executeCode();
+    else {
+      _executeCode();
+    }
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
+
   const runTest = (idx)=> {
-    const { input, output, operator, outputDataType } = codePrompt.tests[idx];
+    const { input, output, operator, outputDataType } = codePrompt.codePromptTests[idx].test;
     const code = `
 if(${input} ${operator === 'EQUALS' ? '===' : ''} ${output}){
-  console.log('test passes');
+  console.log('test ${idx + 1} passes');
 }
 else {
-  console.log('test does not pass');
+  console.log('test ${idx + 1} does not pass');
 }
     `;
+    console.log(code);
     _executeCode(code);
   };
 
@@ -97,7 +100,8 @@ else {
         <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
       <div id='tests'>
       {
-        codePrompt.tests.map( (test, idx) => {
+        codePrompt.codePromptTests.map( (codePromptTest, idx) => {
+          const { test } = codePromptTest;
           return (
             <div className='test mb-2' key={ test.id }>
               <div>

@@ -9,7 +9,7 @@
     "test:dev": "JWT=t3st1ng DATABASE_URL=postgres://localhost/js_prompt_solver_test_db npm run test -- --watch",
     "build": "webpack",
     "build:dev": "npm run build -- --watch --mode=development",
-    "start:dev": "ADMINS=ericpkatz JWT=shhhh nodemon server --ignore dist/ --ignore src/ & npm run build:dev",
+    "start:dev": "NODE_ENV=DEV ADMINS=ericpkatz JWT=shhhh nodemon server --ignore dist/ --ignore src/ & npm run build:dev",
     "start:dev:sync": "SYNC=true npm run start:dev",
     "start:dev:sync:once": "npm run sync && npm run start:dev"
   },
@@ -45,6 +45,7 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
+    "openurl": "^1.1.1",
     "pg": "^8.8.0",
     "sequelize": "^6.25.2"
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Routes, Route, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin, fetchFeedbacksTo, fetchAvailableFeedbackMap} from '../store';
@@ -23,6 +23,7 @@ function usePrevious(value) {
 
 const App = ()=> {
   const { promptAttempts, codePrompts, auth, enrollments, assignments } = useSelector(state => state);
+  const [ error, setError ] = useState('');
   const isAdmin = auth.isAdmin;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,11 +45,15 @@ const App = ()=> {
       dispatch(fetchAdmin());
     }
     if(auth.id){
-      dispatch(fetchEnrollments());
-      dispatch(fetchFeedbacksTo());
-      dispatch(fetchAvailableFeedbackMap());
-      //dispatch(fetchPromptAttempts());
-      //dispatch(fetchFeedbacks());
+      Promise.all([
+        dispatch(fetchEnrollments()),
+        dispatch(fetchFeedbacksTo()),
+        dispatch(fetchAvailableFeedbackMap())
+      ])
+      .catch(ex =>{
+        setError(ex.response.data.error);
+      });
+      
     }
     if(prev && prev.id && !auth.id){
       dispatch(clear(navigate));
@@ -58,14 +63,10 @@ const App = ()=> {
   return (
     <div>
       {
-        !!auth.id && (
-          <nav>
-            <Link to='/'>JS Prompt Solver</Link>
-            <Link to='/history'>History</Link>
-          </nav>
-        )
+        !!error && <div className='alert alert-danger'>{ error }</div>
       }
       <main>
+        <h1>JS Prompt Solver</h1>
         <section id='welcome'>
           {
             !!auth.id && (

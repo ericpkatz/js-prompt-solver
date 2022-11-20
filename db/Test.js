@@ -25,10 +25,6 @@ const Test = conn.define('test', {
   outputDataType: {
     type: ENUM('NUMERIC', 'STRING'),
     allowNull: false,
-  },
-  codePromptId: {
-    type: UUID,
-    allowNull: false
   }
 });
 

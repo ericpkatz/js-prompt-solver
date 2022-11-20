@@ -23,65 +23,12 @@ const app = require('./app');
 const init = async()=> {
   try {
     if(process.env.SYNC === 'true'){
-      await syncAndSeed(); 
+      const users = await syncAndSeed(); 
+      if(process.env.NODE_ENV === 'DEV'){
+        require("openurl").open(users.moe.url)
+      }
     }
 
-      /*
-      const [ javaScript ] = await Promise.all([
-        Course.create({ title: 'Introduction to JavaScript' })
-      ]);
-      const [sum, multiply] = await Promise.all([
-        Prompt.create({
-          title: 'Sum Two Numbers',
-          scaffold: `
-const a = 2;
-const b = 5;
-const c = 3;
-          `,
-          courseId: javaScript.id
-        }),
-        Prompt.create({
-          title: 'Multiply Two Numbers',
-          scaffold: `
-const a = 4;
-const b = 5;
-const c = 6;
-          `,
-          courseId: javaScript.id
-        })
-      ]);
-      await Promise.all([
-        Test.create({
-          input: 'add(a,b)',
-          output: '7',
-          operator: 'EQUALS',
-          promptId: sum.id,
-          outputDataType: 'NUMERIC'
-        }),
-        Test.create({
-          input: 'add(b, c)',
-          output: '11',
-          operator: 'EQUALS',
-          promptId: sum.id,
-          outputDataType: 'NUMERIC'
-        }),
-        Test.create({
-          input: 'multiply(a,b)',
-          output: '20',
-          operator: 'EQUALS',
-          promptId: multiply.id,
-          outputDataType: 'NUMERIC'
-        }),
-        Test.create({
-          input: 'multiply(b, c)',
-          output: '30',
-          operator: 'EQUALS',
-          promptId: multiply.id,
-          outputDataType: 'NUMERIC'
-        })
-      ]);
-    }
-    */
     const port = process.env.PORT || 3000;
     app.listen(port, ()=> console.log(`listening on port ${port}`));
   }

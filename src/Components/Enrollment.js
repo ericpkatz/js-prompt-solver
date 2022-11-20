@@ -14,13 +14,18 @@ const Enrollment = ()=> {
     return null;
   }
   const cohort = enrollment.cohort; 
-  console.log(feedbacksTo);
   const unreviewedFeedback = feedbacksTo.filter(feedback=> !feedback.reviewed && feedback.promptAttempt.enrollmentId === enrollment.id);
   let shown = false;
   //todo - get unacknowledged feedbacks
   return (
             <div key={ cohort.id}>
-              <h2>{ cohort.name } { cohort.course.title }</h2>
+              <ul>
+                <li><strong>Your Course:</strong> { cohort.course.title }</li>
+                <li><strong>Your Cohort:</strong> { cohort.name }</li>
+                {
+                 !!cohort.topic && <li><strong>Your Topic:</strong> { cohort.topic.title }</li>
+                }
+              </ul>
               <div>
                 {
                   !cohort.topic && <div>You have no assignments</div> 
@@ -45,7 +50,7 @@ const Enrollment = ()=> {
                     }
                     return (
                       <div className='alert alert-primary' key={ promptAttempt.id }>
-                        You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>leave</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>
+                        You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>feedback</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>
 
                       </div>
                     );
@@ -73,7 +78,6 @@ const Enrollment = ()=> {
                         }
                         return (
                           <div key = {codePrompt.id }>
-                          ({ codePrompt.rank })
                           <PromptAttempt key={ codePrompt.id } promptAttempt = { promptAttempt} codePrompt={ codePrompt }/>
                           </div>
                         );

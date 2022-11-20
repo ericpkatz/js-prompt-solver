@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback } = require('../db');
+const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback, CodePromptTest } = require('../db');
 const { Op } = conn.Sequelize; 
 const { isLoggedIn, isAdmin } = require('./middleware');
 
@@ -150,7 +150,10 @@ app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
                 {
                   model: CodePrompt,
                   include: [
-                    Test
+                    {
+                      model: CodePromptTest,
+                      include: [Test]
+                    }
                   ]
                 }
               ]

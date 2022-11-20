@@ -16,8 +16,8 @@ const seed = async function({ conn, data }){
       })
       .then( _created => {
         return Promise.all(codePrompt.tests.map( test => {
-          return conn.models.test.create({ ...test, codePromptId: _created.id });
-
+          return conn.models.test.create(test)
+            .then(_test => conn.models.codePromptTest.create({testId: _test.id, codePromptId: _created.id }));
         }));
       });
     }));
@@ -125,13 +125,16 @@ const seed = async function({ conn, data }){
       });
     }
   }
-  const tokens = (await conn.models.user.findAll()).map( user => {
+  const users = (await conn.models.user.findAll()).map( user => {
     return {
-      user: user.login,
-      url: `localhost:3000/login/${user.generateToken()}`
+      ...(user.get()),
+      url: `http://localhost:3000/login/${user.generateToken()}`
     }
   });
-  console.log(tokens);
+  return users.reduce((acc, user)=> {
+    acc[user.login] = user;
+    return acc;
+  }, {});
 
   //console.log(codePrompts);
   //codePrompts = await Promise.all(codePrompts.map( codePrompt => conn.models.codePrompt.create(codePrompt)));

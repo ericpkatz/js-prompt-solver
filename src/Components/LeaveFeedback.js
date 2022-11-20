@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { fetchAvailableFeedbackMap } from '../store';
@@ -70,12 +70,14 @@ const LeaveFeedback = ()=> {
 
   return (
     <div>
-      <h1>{ promptAttempt.codePrompt.title }</h1>
-      <h2>Yours</h2>
+      <h1><Link to={`/enrollments/${enrollmentId}`}><i className="bi bi-arrow-left-square-fill"></i>Back to Prompt Solver</Link></h1>
+      <h1>Provide Feedback for your Peers</h1>
+      <h2>{ promptAttempt.codePrompt.title }</h2>
+      <h3>Your Attempt</h3>
       <pre>
         { yourPromptAttempt.attempt }
       </pre>
-      <h2>Theirs</h2>
+      <h3>Their Attempt</h3>
       <pre>
         { promptAttempt.attempt }
       </pre>

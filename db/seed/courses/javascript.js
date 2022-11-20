@@ -89,35 +89,23 @@ const add = (a, b) = {
         {
           title: 'Write a function which adds n numbers',
           rank: 3,
-          scaffold: `
-const a = 2;
-const b = 3;
-const c = 1;
-const d = 4;
-          `,
-          scaffoldAfter: `
-const result1 = add(a, b);
-console.log('result1', result1);
-const result2 = add(a, b, c);
-console.log('result2', result2);
-const result3 = add(a, b, c, d);
-console.log('result3', result3);
-          `,
+          scaffold: ``,
+          scaffoldAfter: ``,
           tests: [
             {
-              input: 'result1',
+              input: 'add(2, 3)',
               output: '5',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             },
             {
-              input: 'result2',
-              output: '6',
+              input: 'add(2, 3, 4)',
+              output: '9',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             },
             {
-              input: 'result3',
+              input: 'add(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)',
               output: '10',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
@@ -127,26 +115,18 @@ console.log('result3', result3);
         {
           title: 'Write a function which adds three numbers',
           rank: 2,
-          scaffold: `
-  const a = 2;
-  const b = 3;
-  const c = 1;
-  const d = 4;
-          `,
-          scaffoldAfter: `
-  const result1 = add(a, b, c);
-  const result2 = add(b, c, d);
-          `,
+          scaffold: ``,
+          scaffoldAfter: ``,
           tests: [
             {
-              input: 'result1',
+              input: 'add(1, 2, 3)',
               output: '6',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             },
             {
-              input: 'result2',
-              output: '8',
+              input: 'add(3, 4, 5)',
+              output: '12',
               operator: 'EQUALS',
               outputDataType: 'NUMERIC'
             }
