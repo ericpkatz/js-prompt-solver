@@ -6,6 +6,7 @@ const { isLoggedIn, isAdmin } = require('./middleware');
 module.exports = app;
 
 app.use('/admin', isLoggedIn, isAdmin, require('./admin'));
+app.use('/enrollments', isLoggedIn, require('./enrollments'));
 
 app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   try{
@@ -120,65 +121,6 @@ app.get('/feedbacks/to', isLoggedIn, async(req, res, next)=> {
   }
 });
 
-app.get('/enrollments', isLoggedIn, async(req, res, next)=> {
-  try{
-    const enrollments = await Enrollment.findAll({
-      where: {
-        userId: req.user.id,
-      },
-      include: [
-        {
-          model: PromptAttempt,
-          include: [
-            {
-              model: CodePrompt,
-            },
-            {
-              model: Feedback,
-            }
-          ]
-        },
-        {
-          model: Cohort,
-          include: [
-            {
-              model: Course
-            },
-            {
-              model: Topic,
-              include: [
-                {
-                  model: CodePrompt,
-                  include: [
-                    {
-                      model: CodePromptTest,
-                      include: [Test]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-    res.send(enrollments);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
-app.put('/enrollments/:enrollmentId/topics/:topicId', isLoggedIn, async(req, res, next)=> {
-  try{
-    await req.user.reset(req.params.enrollmentId, req.params.topicId);
-    res.sendStatus(204);
-  }
-  catch(ex){
-    next(ex);
-  }
-});
-
 app.get('/promptAttempts', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getPromptAttempts());
@@ -249,6 +191,7 @@ app.put('/feedbacks/to/:id/markAsReviewed', isLoggedIn, async(req, res, next)=> 
     next(ex);
   }
 });
+
 app.put('/promptAttempts/:promptAttemptId/feedbacks/:id', isLoggedIn, async(req, res, next)=> {
   try{
     //GET the promptAttempt

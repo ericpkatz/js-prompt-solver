@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { markAsReviewed } from '../store';
+import BackToCodePrompts from './common/BackToCodePrompts';
 
 const FeedbackTo = ()=> {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const FeedbackTo = ()=> {
 
   return (
     <div>
-      <Link to={`/enrollments/${id}`}>Back to Code Prompts</Link>
+      <BackToCodePrompts enrollment={ enrollment } />
       <h4>{ promptAttempt.codePrompt.title }</h4>
       {
         !!feedbacks.find(feedback => feedback.reviewed) && <div className='alert alert-success'>You have no more feedback to review for this prompt attempt</div>

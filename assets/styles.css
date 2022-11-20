@@ -6,6 +6,8 @@ body {
 #title {
   text-transform: uppercase;
   font-family: courier;
+  text-align: center;
+  letter-spacing: 1rem;
 }
 
 h2 {

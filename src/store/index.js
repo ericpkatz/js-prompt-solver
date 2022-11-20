@@ -25,6 +25,20 @@ export const savePromptAttempt = (promptAttempt)=> {
   };
 };
 
+export const removeStudentTest = (promptAttemptTest)=> {
+  return async(dispatch)=> {
+    /*
+    const response = await axios('/api/promptAttempts', {
+      method: 'post',
+      withCredentials: true,
+      data: promptAttempt
+    });
+    dispatch(fetchEnrollments());
+    */
+    console.log(promptAttemptTest);
+  };
+};
+
 export const createFeedback = (feedback)=> {
   return async(dispatch)=> {
     const response = await axios(`/api/feedbacks/${feedback.id}`, {

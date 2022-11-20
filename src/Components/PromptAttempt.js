@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { savePromptAttempt } from '../store';
+import { savePromptAttempt, removeStudentTest } from '../store';
 import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
 
@@ -76,20 +76,36 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     const tests = codePrompt.codePromptTests.map((_, idx)=> {
       return runTest(idx);
     }).join(';');
-    _executeCode(tests);
+    const studentTests = (promptAttempt.promptAttemptTests || []).map((_, idx)=> {
+      return studentTest(idx)
+    }).join(';');
+    _executeCode(tests + studentTests);
     
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
 
+  const studentTest = (idx)=> {
+    const { input, output, operator, outputDataType } = promptAttempt.promptAttemptTests[idx].test;
+    const code = `
+if(${input} ${operator === 'EQUALS' ? '===' : ''} ${output}){
+  console.log('Student Test ${idx + 1} passes');
+}
+else {
+  console.log('Student Test ${idx + 1} does not pass');
+}
+    `;
+    return code;
+  };
+
   const runTest = (idx)=> {
     const { input, output, operator, outputDataType } = codePrompt.codePromptTests[idx].test;
     const code = `
 if(${input} ${operator === 'EQUALS' ? '===' : ''} ${output}){
-  console.log('test ${idx + 1} passes');
+  console.log('Test ${idx + 1} passes');
 }
 else {
-  console.log('test ${idx + 1} does not pass');
+  console.log('Test ${idx + 1} does not pass');
 }
     `;
     return code;
@@ -105,37 +121,67 @@ else {
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
         <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
-      <div id='tests'>
+      <div>
+      <h3>Tests</h3>
+      <table className='table'>
+        <tbody>
       {
         codePrompt.codePromptTests.map( (codePromptTest, idx) => {
           const { test } = codePromptTest;
           return (
-            <div className='test mb-2' key={ test.id }>
-              <div>
+            <tr key={ test.id }>
+              <td>
                 Test { idx + 1 }
-              </div>
-              <div>
+              </td>
+              <td>
                 { test.input }
-              </div>
-              <div>
+              </td>
+              <td>
                 { test.operator }
-              </div>
-              <div>
+              </td>
+              <td>
                 { test.output }
-              </div>
-              <div>
+              </td>
+              <td>
                 { test.outputDataType }
-              </div>
-              <div>
-                <button onClick={ ()=> runTest(idx)} className='btn btn-primary btn-sm btn-test' data-idx={ idx }>Run Test</button>
-              </div>
-            </div>
+              </td>
+              <td>
+              </td>
+            </tr>
           );
         })
       }
-      <div>
-        Enable Student to create a test
-      </div>
+      {
+        !!promptAttempt.id && promptAttempt.promptAttemptTests.map( (promptAttemptTest, idx) => {
+          const { test } = promptAttemptTest;
+          return (
+            <tr key={ test.id }>
+              <td>
+                Student Test { idx + 1 }
+              </td>
+              <td>
+                { test.input }
+              </td>
+              <td>
+                { test.operator }
+              </td>
+              <td>
+                { test.output }
+              </td>
+              <td>
+                { test.outputDataType }
+              </td>
+              <td>
+                <button className='btn btn-danger btn-sm' onClick={ ()=> dispatch(removeStudentTest(promptAttemptTest))}>
+                Remove Student Test
+                </button>
+              </td>
+            </tr>
+          );
+        })
+      }
+        </tbody>
+      </table>
       </div>
         <div className='mt-2'>
           <button id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>

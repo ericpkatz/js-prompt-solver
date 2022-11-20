@@ -54,6 +54,19 @@ const seed = async function({ conn, data }){
                       }
                     })).id
                   })
+                  .then(_promptAttempt => {
+                    if(promptAttempt.tests){
+                      return Promise.all(
+                        promptAttempt.tests.map( test => {
+                          return conn.models.test.create(test)
+                            .then( test => {
+                              return conn.models.promptAttemptTest.create({testId: test.id, promptAttemptId: _promptAttempt.id})
+                            })
+                        })
+                      )
+                      console.log(promptAttempt.tests);
+                    }
+                  })
                 }));
               });
             });
@@ -116,8 +129,6 @@ const seed = async function({ conn, data }){
           },
         ]
       }); 
-      console.log(fromEnrollment.id, toEnrollment.id);
-      console.log(promptAttempt.attempt);
       await conn.models.feedback.create({
         promptAttemptId: promptAttempt.id,
         enrollmentId: fromEnrollment.id,

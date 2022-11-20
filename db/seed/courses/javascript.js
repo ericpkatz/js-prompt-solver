@@ -27,7 +27,33 @@ You also need to return the result instead of console.logging.
   return a + b;
 }
               `,
-              submitted: true
+              submitted: true,
+              tests: [
+                {
+                  input: 'add(5, 7)',
+                  output: '12',
+                  operator: 'EQUALS',
+                  outputDataType: 'NUMERIC'
+                },
+
+              ]
+            },
+            {
+              title: 'the add function with three numbers',
+              attempt: 
+`function add(){
+  return a + b + c;
+}
+              `,
+              submitted: false,
+              tests: [
+                {
+                  input: 'add(5, 7, 1)',
+                  output: '13',
+                  operator: 'EQUALS',
+                  outputDataType: 'NUMERIC'
+                }
+              ]
             },
           ]
         },

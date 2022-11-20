@@ -76,6 +76,7 @@ const Enrollment = ()=> {
                         if(!promptAttempt.submitted){
                           shown = true;
                         }
+                        console.log(promptAttempt);
                         return (
                           <div key = {codePrompt.id }>
                           <PromptAttempt key={ codePrompt.id } promptAttempt = { promptAttempt} codePrompt={ codePrompt }/>

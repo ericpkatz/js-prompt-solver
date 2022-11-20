@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { fetchAvailableFeedbackMap } from '../store';
 import DateLabel from './common/DateLabel';
+import BackToCodePrompts from './common/BackToCodePrompts';
 
 
 const Feedback = ({ _feedback, addFeedback, removeFeedback })=> {
@@ -70,7 +71,7 @@ const LeaveFeedback = ()=> {
 
   return (
     <div>
-      <h1><Link to={`/enrollments/${enrollmentId}`}><i className="bi bi-arrow-left-square-fill"></i>Back to Prompt Solver</Link></h1>
+      <BackToCodePrompts enrollment={ enrollment } />
       <h1>Provide Feedback for your Peers</h1>
       <h2>{ promptAttempt.codePrompt.title }</h2>
       <h3>Your Attempt</h3>

@@ -42,8 +42,10 @@ PromptAttempt.hasMany(Feedback);
 CodePromptTest.belongsTo(Test);
 CodePromptTest.belongsTo(CodePrompt);
 CodePrompt.hasMany(CodePromptTest);
+
 PromptAttemptTest.belongsTo(PromptAttempt);
 PromptAttemptTest.belongsTo(Test);
+PromptAttempt.hasMany(PromptAttemptTest);
 
 const syncAndSeed = async()=> {
   await conn.sync({ force: true });
