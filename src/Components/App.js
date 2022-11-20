@@ -66,7 +66,7 @@ const App = ()=> {
         !!error && <div className='alert alert-danger'>{ error }</div>
       }
       <main>
-        <h1>JS Prompt Solver</h1>
+        <h1 id='title'>JS Prompt Solver</h1>
         <section id='welcome'>
           {
             !!auth.id && (

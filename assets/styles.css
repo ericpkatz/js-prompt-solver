@@ -3,6 +3,11 @@ body {
   margin: 0;
 }
 
+#title {
+  text-transform: uppercase;
+  font-family: courier;
+}
+
 h2 {
   text-transform: uppercase;
 }

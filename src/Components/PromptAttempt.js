@@ -63,13 +63,21 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const save = ev => {
     ev.preventDefault();
-    const idx = document.activeElement.getAttribute('data-idx'); 
+    //const idx = document.activeElement.getAttribute('data-idx'); 
+
+    /*
     if(idx){
       runTest(idx*1);
     }
     else {
       _executeCode();
     }
+    */
+    const tests = codePrompt.codePromptTests.map((_, idx)=> {
+      return runTest(idx);
+    }).join(';');
+    _executeCode(tests);
+    
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     dispatch(savePromptAttempt(promptAttempt));
   }
@@ -84,8 +92,7 @@ else {
   console.log('test ${idx + 1} does not pass');
 }
     `;
-    console.log(code);
-    _executeCode(code);
+    return code;
   };
 
   return (
@@ -104,6 +111,9 @@ else {
           const { test } = codePromptTest;
           return (
             <div className='test mb-2' key={ test.id }>
+              <div>
+                Test { idx + 1 }
+              </div>
               <div>
                 { test.input }
               </div>
@@ -128,7 +138,7 @@ else {
       </div>
       </div>
         <div className='mt-2'>
-          <button id='run' className='btn btn-primary btn-sm me-2' disabled={!attempt || attempt === '//your code here' || (promptAttempt && promptAttempt.attempt === attempt)}>Run and Save Your Code</button>
+          <button id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>
           <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
         </div>
       </form>
