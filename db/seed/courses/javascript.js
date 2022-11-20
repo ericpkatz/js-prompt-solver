@@ -1,3 +1,6 @@
+const ADD_THREE = 'Write A Function Which Adds Three Numbers';
+const ADD_TWO = 'Write A Function Which Adds Two Numbers';
+const ADD_N = 'Write A Function Which Adds N Numbers';
 module.exports = {
   title: 'Introduction to JavaScript',
   cohorts: [
@@ -8,11 +11,20 @@ module.exports = {
         {
           from: 'larry',
           to: 'moe',
-          title: 'the add function with two numbers',
+          title: ADD_TWO,
           comments: 
 `
 I think you are forgetting to put in parameters.
 You also need to return the result instead of console.logging.
+`
+        },
+        {
+          from: 'curly',
+          to: 'moe',
+          title: ADD_TWO,
+          comments: 
+`
+check your params
 `
         }
       ], 
@@ -21,7 +33,7 @@ You also need to return the result instead of console.logging.
           login: 'moe',
           promptAttempts: [
             {
-              title: 'the add function with two numbers',
+              title: ADD_TWO,
               attempt: 
 `function add(){
   return a + b;
@@ -39,7 +51,7 @@ You also need to return the result instead of console.logging.
               ]
             },
             {
-              title: 'the add function with three numbers',
+              title: ADD_THREE,
               attempt: 
 `function add(){
   return a + b + c;
@@ -61,7 +73,7 @@ You also need to return the result instead of console.logging.
           login: 'larry',
           promptAttempts: [
             {
-              title: 'the add function with two numbers',
+              title: ADD_TWO,
               attempt: `
 const add = (a, b)=> {
   return a + b;
@@ -75,7 +87,7 @@ const add = (a, b)=> {
           login: 'curly',
           promptAttempts: [
             {
-              title: 'the add function with two numbers',
+              title: ADD_TWO,
               attempt: `
 const add = (a, b) = {
   console.log(a + b);
@@ -93,7 +105,7 @@ const add = (a, b) = {
       title: 'Introduction to functions',
       codePrompts: [
         {
-          title: 'the add function with two numbers',
+          title: ADD_TWO,
           rank: 1,
           scaffold: ``,
           scaffoldAfter: ``,
@@ -113,7 +125,7 @@ const add = (a, b) = {
           ]
         },
         {
-          title: 'Write a function which adds n numbers',
+          title: ADD_N,
           rank: 3,
           scaffold: ``,
           scaffoldAfter: ``,
@@ -139,7 +151,7 @@ const add = (a, b) = {
           ]
         },
         {
-          title: 'Write a function which adds three numbers',
+          title: ADD_THREE,
           rank: 2,
           scaffold: ``,
           scaffoldAfter: ``,

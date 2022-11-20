@@ -9,7 +9,7 @@ import Enrollment from './Enrollment';
 import EnrollmentFeedback from './EnrollmentFeedback';
 import Home from './Home';
 import Feedback from './Feedback';
-import FeedbackTo from './FeedbackTo';
+import FeedbackTo from './FeedbackToYou';
 import ProvideFeedback from './ProvideFeedback';
 import LeaveFeedback from './LeaveFeedback';
 

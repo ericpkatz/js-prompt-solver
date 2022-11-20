@@ -27,15 +27,11 @@ export const savePromptAttempt = (promptAttempt)=> {
 
 export const removeStudentTest = (promptAttemptTest)=> {
   return async(dispatch)=> {
-    /*
-    const response = await axios('/api/promptAttempts', {
-      method: 'post',
+    const response = await axios(`/api/promptAttemptTests/${promptAttemptTest.id}`, {
+      method: 'delete',
       withCredentials: true,
-      data: promptAttempt
     });
     dispatch(fetchEnrollments());
-    */
-    console.log(promptAttemptTest);
   };
 };
 

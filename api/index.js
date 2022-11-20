@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback, CodePromptTest } = require('../db');
+const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback, CodePromptTest, PromptAttemptTest } = require('../db');
 const { Op } = conn.Sequelize; 
 const { isLoggedIn, isAdmin } = require('./middleware');
 
@@ -11,6 +11,34 @@ app.use('/enrollments', isLoggedIn, require('./enrollments'));
 app.get('/feedbacks', isLoggedIn, async(req, res, next)=> {
   try{
     res.send(await req.user.getFeedbacks());
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.delete('/promptAttemptTests/:id', isLoggedIn, async(req, res, next)=> {
+  try {
+    const promptAttemptTest = await PromptAttemptTest.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [
+        {
+          model: PromptAttempt,
+          include: [
+            {
+              model: Enrollment,
+              where: {
+                userId: req.user.id
+              }
+            }
+          ]
+        }
+      ]
+    });
+    await promptAttemptTest.destroy();
+    res.sendStatus(204);
   }
   catch(ex){
     next(ex);

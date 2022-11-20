@@ -17,6 +17,8 @@ const Enrollment = ()=> {
   const unreviewedFeedback = feedbacksTo.filter(feedback=> !feedback.reviewed && feedback.promptAttempt.enrollmentId === enrollment.id);
   let shown = false;
   //todo - get unacknowledged feedbacks
+  const seen = {};
+  const seenForThem = {};
   return (
             <div key={ cohort.id}>
               <ul>
@@ -33,6 +35,10 @@ const Enrollment = ()=> {
                 <div>
                 {
                   unreviewedFeedback.map( feedback=> {
+                    if(seen[feedback.promptAttemptId]){
+                      return null;
+                    }
+                    seen[feedback.promptAttemptId] = true;
                     return (
                       <div className='alert alert-primary' key={ feedback.id }>
                         You have received <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> for <strong>{ feedback.promptAttempt.codePrompt.title }</strong>
@@ -48,6 +54,10 @@ const Enrollment = ()=> {
                     if(promptAttempt.feedbacks.find(feedback=> feedback.enrollmentId === enrollment.id)){
                       return null;
                     }
+                    if(seenForThem[promptAttempt.codePromptId]){
+                      return null;
+                    }
+                    seenForThem[promptAttempt.codePromptId] = true;
                     return (
                       <div className='alert alert-primary' key={ promptAttempt.id }>
                         You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>feedback</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>

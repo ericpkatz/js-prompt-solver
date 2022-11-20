@@ -44,15 +44,19 @@ const seed = async function({ conn, data }){
               })
               .then( enrollment => {
                 return Promise.all((user.promptAttempts || []).map( async(promptAttempt) => {
+                  const codePrompt = await conn.models.codePrompt.findOne({
+                      where: {
+                        title: promptAttempt.title 
+                      }
+                    });
+                  if(!codePrompt){
+                    throw `no code prompt for ${promptAttempt.title}`;
+                  }
                   return conn.models.promptAttempt.create({
                     attempt: promptAttempt.attempt,
                     submitted: promptAttempt.submitted,
                     enrollmentId: enrollment.id,
-                    codePromptId: (await conn.models.codePrompt.findOne({
-                      where: {
-                        title: `the add function with two numbers`
-                      }
-                    })).id
+                    codePromptId: codePrompt.id
                   })
                   .then(_promptAttempt => {
                     if(promptAttempt.tests){

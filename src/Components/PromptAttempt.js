@@ -63,6 +63,9 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const save = ev => {
     ev.preventDefault();
+    if(document.activeElement.classList.contains('btn-danger')){
+      return;//removing student test
+    }
     //const idx = document.activeElement.getAttribute('data-idx'); 
 
     /*
