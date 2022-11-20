@@ -78,7 +78,7 @@ const LeaveFeedback = ()=> {
       <pre>
         { yourPromptAttempt.attempt }
       </pre>
-      <h3>Their Attempt</h3>
+      <h3>{promptAttempt.enrollment.user.login}'s Attempt</h3>
       <pre>
         { promptAttempt.attempt }
       </pre>

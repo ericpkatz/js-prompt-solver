@@ -25,7 +25,8 @@ const FeedbackTo = ()=> {
   return (
     <div>
       <BackToCodePrompts enrollment={ enrollment } />
-      <h4>{ promptAttempt.codePrompt.title }</h4>
+      <h2>Peer Feedback</h2>
+      <h4>for { promptAttempt.codePrompt.title }</h4>
       {
         feedbacks.filter(feedback => !feedback.reviewed).length === 0 && <div className='alert alert-success'>You have no more feedback to review for this prompt attempt</div>
       }
@@ -33,11 +34,13 @@ const FeedbackTo = ()=> {
         feedbacks.map( feedback => {
           return (
             <div key={ feedback.id }>
+              <h3>Your Attempt</h3>
               <pre>
               {
                 feedback.promptAttempt.attempt
               }
               </pre>
+              <h3>Peer Feedback from { feedback.enrollment.user.login }</h3>
               <pre>
               { feedback.comments }
               </pre>

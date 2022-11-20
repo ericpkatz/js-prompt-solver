@@ -60,7 +60,7 @@ const Enrollment = ()=> {
                     seenForThem[promptAttempt.codePromptId] = true;
                     return (
                       <div className='alert alert-primary' key={ promptAttempt.id }>
-                        You can leave <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>feedback</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>
+                        You can leave {promptAttempt.enrollment.user.login } <Link to={`/enrollments/${enrollment.id}/feedbacks/${promptAttempt.id}/leave`}>feedback</Link> for <strong>{ promptAttempt.codePrompt.title }</strong>
 
                       </div>
                     );
@@ -86,7 +86,6 @@ const Enrollment = ()=> {
                         if(!promptAttempt.submitted){
                           shown = true;
                         }
-                        console.log(promptAttempt);
                         return (
                           <div key = {codePrompt.id }>
                           <PromptAttempt key={ codePrompt.id } promptAttempt = { promptAttempt} codePrompt={ codePrompt }/>

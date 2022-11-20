@@ -15,7 +15,7 @@ try {
 }
 
 catch(ex){
-  console.log('If running locally add secrets.js with GIT_CLIENT_ID and GIT_CLIENT_SECRET');
+  console.log('If running locally add secrets.js with GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET');
 }
 const { syncAndSeed, conn, Course, Prompt, Test } = require('./db');
 const app = require('./app');

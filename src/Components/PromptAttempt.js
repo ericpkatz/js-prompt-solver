@@ -2,6 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { savePromptAttempt, removeStudentTest } from '../store';
 import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
+import { createPromptAttemptTest } from '../store';
+
+const CreatePromptAttemptTest = ({ promptAttempt })=> {
+  const INITIAL = {
+    input: '',
+    output: '',
+    operator: 'EQUALS',
+    outputDataType: 'NUMERIC'
+  } 
+  const [test, setTest] = useState({...INITIAL});
+
+  const dispatch = useDispatch();
+  const onChange = (ev)=> {
+    setTest({...test, [ev.target.name]: ev.target.value});
+  };
+
+  const _createPromptAttemptTest = async()=> {
+    await dispatch(createPromptAttemptTest({test, promptAttempt: promptAttempt }));
+    setTest({ ...INITIAL });
+  };
+  return (
+    <tr>
+      <td>
+      </td>
+      <td>
+        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange }/>
+      </td>
+      <td>
+        <select name='operator' className='form-control' value={ test.operator } onChange={ onChange }>
+          <option value='EQUALS'>equals</option>
+          <option value='NEQUALS'>not equals</option>
+        </select>
+      </td>
+      <td>
+        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange }/>
+      </td>
+      <td>
+        <select name='outputDataType' className='form-control' value={ test.outputDataType } onChange={ onChange }>
+
+          <option value='STRING'>string</option>
+          <option value='NUMERIC'>number</option>
+        </select>
+      </td>
+      <td>
+        <button onClick={()=> _createPromptAttemptTest()} data-ignore='true' className='btn btn-primary btn-sm' disabled={ !test.output || !test.input }>Add Test</button>
+      </td>
+    </tr>
+  );
+};
+
 
 const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   const [el, setEl] = useState(null);
@@ -63,7 +113,11 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const save = ev => {
     ev.preventDefault();
-    if(document.activeElement.classList.contains('btn-danger')){
+    const elem = document.activeElement;
+    if(elem.getAttribute('data-ignore')){
+      return;
+    }
+    if(elem.classList.contains('btn-danger')){
       return;//removing student test
     }
     //const idx = document.activeElement.getAttribute('data-idx'); 
@@ -91,7 +145,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   const studentTest = (idx)=> {
     const { input, output, operator, outputDataType } = promptAttempt.promptAttemptTests[idx].test;
     const code = `
-if(${input} ${operator === 'EQUALS' ? '===' : ''} ${output}){
+if(${input} ${operator === 'EQUALS' ? '===' : ''} ${ outputDataType === 'STRING' ? "'": ''}${output} ${ outputDataType === 'STRING' ? "'": ''}){
   console.log('Student Test ${idx + 1} passes');
 }
 else {
@@ -183,6 +237,7 @@ else {
           );
         })
       }
+    {!!promptAttempt.id && <CreatePromptAttemptTest promptAttempt={ promptAttempt } /> }
         </tbody>
       </table>
       </div>

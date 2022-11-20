@@ -21,7 +21,7 @@ app.delete('/promptAttemptTests/:id', isLoggedIn, async(req, res, next)=> {
   try {
     const promptAttemptTest = await PromptAttemptTest.findOne({
       where: {
-        id: req.params.id
+        id: req.params.id 
       },
       include: [
         {
@@ -39,6 +39,30 @@ app.delete('/promptAttemptTests/:id', isLoggedIn, async(req, res, next)=> {
     });
     await promptAttemptTest.destroy();
     res.sendStatus(204);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.post('/promptAttemptTests/', isLoggedIn, async(req, res, next)=> {
+  try {
+    const test = await Test.create(req.body.test);
+    const promptAttempt = await PromptAttempt.findByPk(req.body.promptAttempt.id, {
+      include: [
+        {
+          model: Enrollment,
+          where: {
+            userId: req.user.id
+          }
+        }
+      ]
+    });
+    const promptAttemptTest = await PromptAttemptTest.create({
+      testId: test.id,
+      promptAttemptId: promptAttempt.id
+    });
+    res.send(promptAttemptTest);
   }
   catch(ex){
     next(ex);
@@ -80,7 +104,10 @@ app.get('/feedbacks/availableFeedbackMap', isLoggedIn, async(req, res, next)=> {
             }
           },
           include: [
-            User
+            { 
+              model: User,
+              attributes: ['login']
+            }
           ]
         }
       ]
@@ -121,6 +148,15 @@ app.get('/feedbacks/to', isLoggedIn, async(req, res, next)=> {
   try{
     const feedback = await Feedback.findAll({
       include: [
+        {
+          model: Enrollment,
+          include: [
+            {
+              model: User,
+              attributes: ['login']
+            }
+          ]
+        },
         {
           model: PromptAttempt,
           include: [
