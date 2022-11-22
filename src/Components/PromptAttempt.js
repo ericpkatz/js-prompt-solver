@@ -1,10 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { savePromptAttempt, removeStudentTest } from '../store';
 import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
-import { fetchAvailableFeedbackMap, fetchFeedbacksTo, createPromptAttemptTest } from '../store';
+import { updatePromptAttemptTest, fetchAvailableFeedbackMap, fetchFeedbacksTo, createPromptAttemptTest } from '../store';
 
-const CreatePromptAttemptTest = ({ promptAttempt })=> {
+const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
+  const [test, setTest] = useState(promptAttemptTest.test);
+
+  const dispatch = useDispatch();
+  const onChange = (ev)=> {
+    setTest({...test, [ev.target.name]: ev.target.value});
+  };
+
+  useEffect(()=> {
+    setTest(promptAttemptTest.test )
+  }, [promptAttemptTest]);
+
+  const _updatePromptAttemptTest = async()=> {
+    await dispatch(updatePromptAttemptTest({...promptAttemptTest, test }));
+    updateHook();
+  };
+
+  const _removeStudentTest = async()=> {
+    await dispatch(removeStudentTest(promptAttemptTest));
+    updateHook();
+  };
+  return (
+    <tr>
+      <td>
+        Student Test { idx + 1 }
+      </td>
+      <td>
+        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange }/>
+      </td>
+      <td>
+        <select name='operator' className='form-control' value={ test.operator } onChange={ onChange }>
+          <option value='EQUALS'>equals</option>
+          <option value='NEQUALS'>not equals</option>
+        </select>
+      </td>
+      <td>
+        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange }/>
+      </td>
+      <td>
+        <select name='outputDataType' className='form-control' value={ test.outputDataType } onChange={ onChange }>
+
+          <option value='STRING'>string</option>
+          <option value='NUMERIC'>number</option>
+        </select>
+      </td>
+      <td>
+        <button onClick={()=> _updatePromptAttemptTest()} data-ignore='true' className='btn btn-primary btn-sm me-2' disabled={ !test.output || !test.input || (
+          test.output === promptAttemptTest.test.output
+          &&
+          test.input === promptAttemptTest.test.input
+          &&
+          test.outputDataType === promptAttemptTest.test.outputDataType
+          &&
+          test.operator === promptAttemptTest.test.operator
+        )}>
+          Update Test
+        </button>
+        <button className='btn btn-danger btn-sm' onClick={ _removeStudentTest }>
+        Remove Test
+        </button>
+      </td>
+    </tr>
+  );
+};
+
+const CreatePromptAttemptTest = ({ promptAttempt, updateHook })=> {
   const INITIAL = {
     input: '',
     output: '',
@@ -21,6 +86,7 @@ const CreatePromptAttemptTest = ({ promptAttempt })=> {
   const _createPromptAttemptTest = async()=> {
     await dispatch(createPromptAttemptTest({test, promptAttempt: promptAttempt }));
     setTest({ ...INITIAL });
+    updateHook();
   };
   return (
     <tr>
@@ -46,7 +112,7 @@ const CreatePromptAttemptTest = ({ promptAttempt })=> {
         </select>
       </td>
       <td>
-        <button onClick={()=> _createPromptAttemptTest()} data-ignore='true' className='btn btn-primary btn-sm' disabled={ !test.output || !test.input }>Add Test</button>
+        <button onClick={()=> _createPromptAttemptTest()} data-ignore='true' className='btn btn-primary btn-sm' disabled={ !test.output || !test.input }>Create Test</button>
       </td>
     </tr>
   );
@@ -60,6 +126,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   const [editor, setEditor] = useState(null);
   const [ _console, setConsole] = useState(null);
   const dispatch = useDispatch();
+  const runButton = useRef();
 
   useEffect(()=> {
     if(elScaffold){
@@ -170,6 +237,10 @@ else {
     return code;
   };
 
+  if(promptAttempt.promptAttemptTests){
+    promptAttempt.promptAttemptTests.sort((a, b)=> new Date(a.createdAt) - new Date(b.createdAt));
+  }
+
   return (
     <div>
       <h3>{ codePrompt.title }</h3>
@@ -183,6 +254,16 @@ else {
       <div>
       <h3>Tests</h3>
       <table className='table'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Input</th>
+            <th>Operation</th>
+            <th>Output</th>
+            <th>Output Data Type</th>
+            <th></th>
+          </tr>
+        </thead>
         <tbody>
       {
         codePrompt.codePromptTests.map( (codePromptTest, idx) => {
@@ -214,37 +295,23 @@ else {
         !!promptAttempt.id && promptAttempt.promptAttemptTests.map( (promptAttemptTest, idx) => {
           const { test } = promptAttemptTest;
           return (
-            <tr key={ test.id }>
-              <td>
-                Student Test { idx + 1 }
-              </td>
-              <td>
-                { test.input }
-              </td>
-              <td>
-                { test.operator }
-              </td>
-              <td>
-                { test.output }
-              </td>
-              <td>
-                { test.outputDataType }
-              </td>
-              <td>
-                <button className='btn btn-danger btn-sm' onClick={ ()=> dispatch(removeStudentTest(promptAttemptTest))}>
-                Remove Student Test
-                </button>
-              </td>
-            </tr>
+            <EditPromptAttemptTest key={ promptAttemptTest.id } promptAttemptTest={ promptAttemptTest } idx={ idx } updateHook={ ()=> {
+              runButton.current.focus();
+              runButton.current.click()}
+            }/>
           );
         })
       }
-    {!!promptAttempt.id && <CreatePromptAttemptTest promptAttempt={ promptAttempt } /> }
+    {!!promptAttempt.id && <CreatePromptAttemptTest promptAttempt={ promptAttempt } updateHook={ ()=> {
+              runButton.current.focus();
+              runButton.current.click();
+
+    }}/> }
         </tbody>
       </table>
       </div>
         <div className='mt-2'>
-          <button id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>
+          <button ref={ runButton } id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>
           <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
         </div>
       </form>

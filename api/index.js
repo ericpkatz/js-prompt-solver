@@ -69,6 +69,34 @@ app.post('/promptAttemptTests/', isLoggedIn, async(req, res, next)=> {
   }
 });
 
+app.put('/promptAttemptTests/:id', isLoggedIn, async(req, res, next)=> {
+  try {
+    const promptAttemptTest = await PromptAttemptTest.findByPk(req.params.id, {
+      include: [
+        {
+          model: Test
+        },
+        {
+          model: PromptAttempt,
+          include: [
+            {
+              model: Enrollment,
+              where: {
+                userId: req.user.id
+              }
+            }
+          ]
+        }
+      ]
+    });
+    const test = await promptAttemptTest.test.update(req.body.test);
+    res.send(test);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.get('/feedbacks/availableFeedbackMap', isLoggedIn, async(req, res, next)=> {
   try{
     const promptAttempts = await PromptAttempt.findAll({

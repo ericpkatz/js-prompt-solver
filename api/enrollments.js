@@ -12,6 +12,25 @@ app.get('/', async(req, res, next)=> {
       },
       include: [
         {
+          model: Feedback,
+          include: [ 
+            {
+              model: PromptAttempt,
+              include: [
+                {
+                  model: Enrollment,
+                  include: [
+                    {
+                      model: User,
+                      attributes: ['login']
+                    }
+                  ]
+                }
+              ] 
+            }
+          ]
+        },
+        {
           model: PromptAttempt,
           include: [
             {
@@ -20,9 +39,21 @@ app.get('/', async(req, res, next)=> {
             },
             {
               model: CodePrompt,
+              include: [ Topic ]
             },
             {
               model: Feedback,
+              include: [
+                {
+                  model: Enrollment,
+                  include: [
+                    {
+                      model: User,
+                      attributes: ['login']
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

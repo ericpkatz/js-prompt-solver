@@ -93,6 +93,11 @@ const Enrollment = ()=> {
                       })
                   }
                 </ul>
+                {
+                  !shown && !!cohort.topic && <div>
+                    Looks like you are all done with the code prompts for <strong>{ cohort.topic.title }</strong>. Would you like to take a look back at some of your work? <Link to='/history'>History</Link>
+                  </div>
+                }
               </div>
             </div>
           );

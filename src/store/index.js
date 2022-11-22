@@ -31,7 +31,7 @@ export const removeStudentTest = (promptAttemptTest)=> {
       method: 'delete',
       withCredentials: true,
     });
-    dispatch(fetchEnrollments());
+    return dispatch(fetchEnrollments());
   };
 };
 
@@ -42,7 +42,18 @@ export const createPromptAttemptTest = (promptAttemptTest)=> {
       withCredentials: true,
       data: promptAttemptTest
     });
-    dispatch(fetchEnrollments());
+    return dispatch(fetchEnrollments());
+  };
+};
+
+export const updatePromptAttemptTest = (promptAttemptTest)=> {
+  return async(dispatch)=> {
+    const response = await axios(`/api/promptAttemptTests/${promptAttemptTest.id}`, {
+      method: 'put',
+      withCredentials: true,
+      data: promptAttemptTest
+    });
+    return dispatch(fetchEnrollments());
   };
 };
 

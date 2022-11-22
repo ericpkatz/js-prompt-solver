@@ -31,6 +31,7 @@ Topic.hasMany(CodePrompt);
 PromptAttempt.belongsTo(Enrollment);
 PromptAttempt.belongsTo(CodePrompt);
 
+Enrollment.hasMany(Feedback);
 Enrollment.hasMany(PromptAttempt);
 CodePrompt.hasMany(PromptAttempt);
 
