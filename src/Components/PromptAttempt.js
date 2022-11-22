@@ -84,6 +84,11 @@ const CreatePromptAttemptTest = ({ promptAttempt, updateHook })=> {
   };
 
   const _createPromptAttemptTest = async()=> {
+    if(!promptAttempt.id){
+      console.log(promptAttempt);
+      alert('need to submit prompt first');
+      return;
+    }
     await dispatch(createPromptAttemptTest({test, promptAttempt: promptAttempt }));
     setTest({ ...INITIAL });
     updateHook();
@@ -121,45 +126,15 @@ const CreatePromptAttemptTest = ({ promptAttempt, updateHook })=> {
 
 const PromptAttempt = ({ promptAttempt, codePrompt })=> {
   const [el, setEl] = useState(null);
-  const [elScaffold, setElScaffold] = useState(null);
-  const [elScaffoldAfter, setElScaffoldAfter] = useState(null);
   const [editor, setEditor] = useState(null);
   const [ _console, setConsole] = useState(null);
   const dispatch = useDispatch();
   const runButton = useRef();
 
   useEffect(()=> {
-    if(elScaffold){
-      const _editor = CodeMirror(elScaffold, {
-        value: (codePrompt && codePrompt.scaffold) ? codePrompt.scaffold.trim() : '', 
-        lineNumbers: false,
-        language: 'javascript',
-        readOnly: true,
-        viewportMargin: Infinity
-      });
-      const lines = codePrompt.scaffold.split('\n').length;
-      _editor.setSize('100%', `${lines * 1.5}rem`);
-    }
-  }, [elScaffold]);
-
-  useEffect(()=> {
-    if(elScaffoldAfter){
-      const _editor = CodeMirror(elScaffoldAfter, {
-        value: codePrompt.scaffoldAfter.trim(), 
-        lineNumbers: false,
-        language: 'javascript',
-        readOnly: true,
-        viewportMargin: Infinity
-      });
-      const lines = codePrompt.scaffoldAfter.split('\n').length;
-      _editor.setSize('100%', `${lines * 1.5}rem`);
-    }
-  }, [elScaffold]);
-
-  useEffect(()=> {
     if(el){
       const _editor = CodeMirror(el, {
-        value: promptAttempt.attempt || '//your code here', 
+        value: promptAttempt.attempt || codePrompt.scaffold, 
         lineNumbers: true,
         language: 'javascript'
       });
@@ -175,7 +150,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
 
   const _executeCode = (test)=> {
     const logger = _logger(_console);
-    executeCode(`${codePrompt.scaffold};${editor.getValue()};${codePrompt.scaffoldAfter};${ test || ''}`, logger, JSHINT);
+    executeCode(`${editor.getValue()};${ test || ''}`, logger, JSHINT);
   }
 
   const save = async(ev) => {
@@ -187,16 +162,6 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     if(elem.classList.contains('btn-danger')){
       return;//removing student test
     }
-    //const idx = document.activeElement.getAttribute('data-idx'); 
-
-    /*
-    if(idx){
-      runTest(idx*1);
-    }
-    else {
-      _executeCode();
-    }
-    */
     const tests = codePrompt.codePromptTests.map((_, idx)=> {
       return runTest(idx);
     }).join(';');
@@ -245,12 +210,10 @@ else {
     <div>
       <h3>{ codePrompt.title }</h3>
       <form onSubmit={ save }>
-        <div className='scaffold' ref={el => setElScaffold(el)}></div>
         <div id='ide'>
           <div ref={el => setEl(el)}></div>
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
-        <div className='scaffold' ref={el => setElScaffoldAfter(el)}></div>
       <div>
       <h3>Tests</h3>
       <table className='table'>
@@ -302,11 +265,11 @@ else {
           );
         })
       }
-    {!!promptAttempt.id && <CreatePromptAttemptTest promptAttempt={ promptAttempt } updateHook={ ()=> {
+    <CreatePromptAttemptTest promptAttempt={ promptAttempt } updateHook={ ()=> {
               runButton.current.focus();
               runButton.current.click();
 
-    }}/> }
+    }}/>
         </tbody>
       </table>
       </div>

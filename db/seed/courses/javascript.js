@@ -1,5 +1,7 @@
 const ADD_THREE = 'Write A Function Which Adds Three Numbers';
-const ADD_TWO = 'Write A Function Which Adds Two Numbers';
+const ADD_TWO_A = 'Write A Function Which Adds Two Numbers, Part A';
+const ADD_TWO_B = 'Write A Function Which Adds Two Numbers, Part B';
+const ADD_TWO_C = 'Write A Function Which Adds Two Numbers, Part C';
 const ADD_N = 'Write A Function Which Adds N Numbers';
 module.exports = {
   title: 'Introduction to JavaScript',
@@ -11,7 +13,7 @@ module.exports = {
         {
           from: 'larry',
           to: 'moe',
-          title: ADD_TWO,
+          title: ADD_TWO_A,
           comments: 
 `
 I think you are forgetting to put in parameters.
@@ -21,7 +23,7 @@ You also need to return the result instead of console.logging.
         {
           from: 'curly',
           to: 'moe',
-          title: ADD_TWO,
+          title: ADD_TWO_A,
           comments: 
 `
 check your params
@@ -33,7 +35,7 @@ check your params
           login: 'moe',
           promptAttempts: [
             {
-              title: ADD_TWO,
+              title: ADD_TWO_A,
               attempt: 
 `function add(){
   return a + b;
@@ -73,7 +75,7 @@ check your params
           login: 'larry',
           promptAttempts: [
             {
-              title: ADD_TWO,
+              title: ADD_TWO_A,
               attempt: `
 const add = (a, b)=> {
   return a + b;
@@ -87,7 +89,7 @@ const add = (a, b)=> {
           login: 'curly',
           promptAttempts: [
             {
-              title: ADD_TWO,
+              title: ADD_TWO_A,
               attempt: `
 const add = (a, b) = {
   console.log(a + b);
@@ -105,8 +107,54 @@ const add = (a, b) = {
       title: 'Introduction to functions',
       codePrompts: [
         {
-          title: ADD_TWO,
+          title: ADD_TWO_A,
           rank: 1,
+          scaffold: 
+`function add(a, b){
+
+}`,
+          scaffoldAfter: ``,
+          tests: [
+            {
+              input: 'add(2, 3)',
+              output: '5',
+              operator: 'EQUALS',
+              outputDataType: 'NUMERIC'
+            },
+            {
+              input: 'add(3, 4)',
+              output: '7',
+              operator: 'EQUALS',
+              outputDataType: 'NUMERIC'
+            }
+          ]
+        },
+        {
+          title: ADD_TWO_B,
+          rank: 2,
+          scaffold: 
+`function add(){
+
+}`,
+          scaffoldAfter: ``,
+          tests: [
+            {
+              input: 'add(2, 3)',
+              output: '5',
+              operator: 'EQUALS',
+              outputDataType: 'NUMERIC'
+            },
+            {
+              input: 'add(3, 4)',
+              output: '7',
+              operator: 'EQUALS',
+              outputDataType: 'NUMERIC'
+            }
+          ]
+        },
+        {
+          title: ADD_TWO_C,
+          rank: 3,
           scaffold: ``,
           scaffoldAfter: ``,
           tests: [
@@ -126,7 +174,7 @@ const add = (a, b) = {
         },
         {
           title: ADD_N,
-          rank: 3,
+          rank: 8,
           scaffold: ``,
           scaffoldAfter: ``,
           tests: [
@@ -152,7 +200,7 @@ const add = (a, b) = {
         },
         {
           title: ADD_THREE,
-          rank: 2,
+          rank: 4,
           scaffold: ``,
           scaffoldAfter: ``,
           tests: [

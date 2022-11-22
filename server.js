@@ -26,7 +26,7 @@ const init = async()=> {
       const users = await syncAndSeed(); 
       console.log(users);
       if(process.env.NODE_ENV === 'DEV'){
-        //require("open")(users.moe.url)
+        require("open")(users.moe.url)
         //require("open")(users.curly.url, { app: { name: 'safari'}})
       }
     }
