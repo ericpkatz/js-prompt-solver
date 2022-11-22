@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { savePromptAttempt, removeStudentTest } from '../store';
 import { useDispatch } from 'react-redux';
 import { formatDate, executeCode, _logger } from '../utils';
-import { createPromptAttemptTest } from '../store';
+import { fetchAvailableFeedbackMap, fetchFeedbacksTo, createPromptAttemptTest } from '../store';
 
 const CreatePromptAttemptTest = ({ promptAttempt })=> {
   const INITIAL = {
@@ -111,7 +111,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     executeCode(`${codePrompt.scaffold};${editor.getValue()};${codePrompt.scaffoldAfter};${ test || ''}`, logger, JSHINT);
   }
 
-  const save = ev => {
+  const save = async(ev) => {
     ev.preventDefault();
     const elem = document.activeElement;
     if(elem.getAttribute('data-ignore')){
@@ -139,7 +139,9 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     _executeCode(tests + studentTests);
     
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
-    dispatch(savePromptAttempt(promptAttempt));
+    await dispatch(savePromptAttempt(promptAttempt));
+    dispatch(fetchFeedbacksTo());
+    dispatch(fetchAvailableFeedbackMap());
   }
 
   const studentTest = (idx)=> {

@@ -74,7 +74,6 @@ app.get('/feedbacks/availableFeedbackMap', isLoggedIn, async(req, res, next)=> {
     const promptAttempts = await PromptAttempt.findAll({
       where: {
         submitted: true,
-        archived: false
       },
       include: [
         {
@@ -339,7 +338,6 @@ app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)
       where: {
         codePromptId: promptAttempt.codePromptId,
         submitted: true,
-        archived: false,
         enrollmentId: {
           [Op.ne] : promptAttempt.enrollmentId
         }
@@ -357,9 +355,6 @@ app.get('/promptAttempts/:id/provideFeedback', isLoggedIn, async(req, res, next)
         }
       ]
     });
-    //have I provided feedback already?
-    //should we not look at promptAttempts which have been archived
-    //has any feedbacks been provided?
     res.send({
       promptAttempt,
       otherPromptAttempts

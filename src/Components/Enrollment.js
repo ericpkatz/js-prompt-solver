@@ -40,8 +40,8 @@ const Enrollment = ()=> {
                     }
                     seen[feedback.promptAttemptId] = true;
                     return (
-                      <div className='alert alert-primary' key={ feedback.id }>
-                        You have received <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> for <strong>{ feedback.promptAttempt.codePrompt.title }</strong>
+                      <div className='alert alert-success' key={ feedback.id }>
+                        You have received <Link to={`/enrollments/${enrollment.id}/feedbacks/${feedback.promptAttemptId}`}>feedback</Link> for <strong>{ feedback.promptAttempt.codePrompt.title }</strong> from { feedback.enrollment.user.login }
 
                       </div>
                     );
@@ -77,7 +77,6 @@ const Enrollment = ()=> {
                       .sort((a, b)=> a.rank - b.rank)
                       .map( codePrompt => {
                         const promptAttempt = enrollment.promptAttempts
-                          .filter(promptAttempt => !promptAttempt.archived)
                           .find(promptAttempt => promptAttempt.codePromptId === codePrompt.id) || {
                             codePromptId: codePrompt.id, enrollmentId: enrollment.id }
                         if(shown || promptAttempt.submitted){
@@ -94,9 +93,6 @@ const Enrollment = ()=> {
                       })
                   }
                 </ul>
-                {
-                  !shown && cohort.topic && cohort.topic.codePrompts.length && <div>You have attempted all of your code prompts for this topic. Would you like to practice more, or leave feedback for others? Or would you like to archive these codePrompts and do these again? Practice, practice, practice! <button className='btn btn-primary btn-sm' onClick={ ()=> dispatch(resetTopic({ topicId: cohort.topicId, enrollmentId: enrollment.id}))}>Reset This Topic</button></div>
-                }
               </div>
             </div>
           );

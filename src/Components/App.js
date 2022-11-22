@@ -6,12 +6,12 @@ import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
 import PromptAttempt from './PromptAttempt';
 import Enrollment from './Enrollment';
-import EnrollmentFeedback from './EnrollmentFeedback';
 import Home from './Home';
 import Feedback from './Feedback';
 import FeedbackTo from './FeedbackToYou';
 import ProvideFeedback from './ProvideFeedback';
 import LeaveFeedback from './LeaveFeedback';
+import History from './History';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -66,7 +66,7 @@ const App = ()=> {
         !!error && <div className='alert alert-danger'>{ error }</div>
       }
       <main>
-        <h1 id='title'>JS Prompt Solver</h1>
+        <h1 id='title'><Link to='/'>JS Prompt Solver</Link></h1>
         <section id='welcome'>
           {
             !!auth.id && (
@@ -77,6 +77,7 @@ const App = ()=> {
             {
               auth.isAdmin && <Link className='me-3' to='/admin'>Admin</Link>
             }
+                <Link to='/history' className='me-3'>History</Link>
                 <button className='btn btn-primary btn-sm' onClick={ _logout }>Logout</button>
               </div>
             )
@@ -94,7 +95,7 @@ const App = ()=> {
           <Route path='/admin/courses/:id' element={ <AdminCourse /> } />
           <Route path='/enrollments/:id' element={ <Enrollment /> } />
           <Route path='/feedback' element={ <Feedback /> } />
-          <Route path='/enrollments/:id/feedback' element={ <EnrollmentFeedback /> } />
+          <Route path='/history' element={ <History /> } />
           <Route path='/enrollments/:id/feedbacks/:promptAttemptId' element={ <FeedbackTo /> } />
           <Route path='/enrollments/:enrollmentId/feedbacks/:promptAttemptId/leave' element={ <LeaveFeedback /> } />
           <Route path='/promptAttempts/:id/provideFeedback' element={ <ProvideFeedback /> } />

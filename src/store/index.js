@@ -21,7 +21,7 @@ export const savePromptAttempt = (promptAttempt)=> {
       withCredentials: true,
       data: promptAttempt
     });
-    dispatch(fetchEnrollments());
+    return dispatch(fetchEnrollments());
   };
 };
 

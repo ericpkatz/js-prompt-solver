@@ -67,60 +67,17 @@ User.prototype.updateFeedback = async function(feedback){
 }
 
 User.prototype.attemptPrompt = async function(promptAttempt){
-  if(await !this.isYourEnrollment(promptAttempt.enrollmentId)){
+  const isYours = await this.isYourEnrollment(promptAttempt.enrollmentId);
+  if(!isYours){
     throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${promptAttempt.enrollmentId}`);
   }
 
   if(!promptAttempt.id){
     return conn.models.promptAttempt.create(promptAttempt);
   }
-  else {
-    const _promptAttempt = await conn.models.promptAttempt.findByPk(promptAttempt.id);
-    _promptAttempt.update(promptAttempt);
-    return _promptAttempt;
-  }
-}
-
-User.prototype.reset = async function(enrollmentId, topicId){
-  /*
-  if(!(await this.isYourEnrollment(enrollmentId))){
-    throw Error(`enrollment mismatch for user ${this.id} and enrollmentId ${enrollmentId}`);
-  }
-  return 'foo';
-  */
-  const enrollment = await conn.models.enrollment.findByPk(enrollmentId, {
-    include: [
-      {
-        model: conn.models.cohort,
-        include: [
-          {
-            model: conn.models.topic,
-            include: [
-              {
-                model: conn.models.codePrompt
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  });
-  if(enrollment.userId !== this.id){
-    throw Error('this is not your enrollment');
-  }
-  if(!enrollment.cohort.topicId === topicId){
-    throw Error(`topic mismatch for ${topicId} and cohort topicId ${enrollment.cohort.topicId}`);
-  }
-  const codePromptIds = enrollment.cohort.topic.codePrompts.map( codePrompt=> codePrompt.id);
-  const promptAttempts = await conn.models.promptAttempt.findAll({
-    where: {
-      enrollmentId: enrollmentId,
-      codePromptId: {
-        [Op.in]: codePromptIds
-      }
-    }
-  });
-  await Promise.all(promptAttempts.map(promptAttempt => promptAttempt.update({ archived: true })));
+  const _promptAttempt = await conn.models.promptAttempt.findByPk(promptAttempt.id);
+  await _promptAttempt.update(promptAttempt);
+  return _promptAttempt;
 }
 
 User.authenticate = async(code)=> {
@@ -168,13 +125,14 @@ User.authenticate = async(code)=> {
   return user.generateToken();;
 e};
 
-User.prototype.isYourEnrollment = function(enrollmentId){
-  return !!conn.models.enrollment.findOne({
+User.prototype.isYourEnrollment = async function(enrollmentId){
+  const enrollment = await conn.models.enrollment.findOne({
     where: {
       userId: this.id,
-      enrollmentId
+      id: enrollmentId
     }
   });
+  return enrollment !== null;
 }
 
 /*
