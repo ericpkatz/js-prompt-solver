@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin, fetchFeedbacksTo, fetchAvailableFeedbackMap} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
+import AdminEnrollments from './Admin/Enrollments';
 import PromptAttempt from './PromptAttempt';
 import Enrollment from './Enrollment';
 import Home from './Home';
@@ -93,6 +94,7 @@ const App = ()=> {
           <Route path='/' element={ <Home /> } />
           <Route path='/admin' element={ <AdminDashboard /> } />
           <Route path='/admin/courses/:id' element={ <AdminCourse /> } />
+          <Route path='/admin/enrollments/:id' element={ <AdminEnrollments /> } />
           <Route path='/enrollments/:id' element={ <Enrollment /> } />
           <Route path='/feedback' element={ <Feedback /> } />
           <Route path='/history' element={ <History /> } />

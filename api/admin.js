@@ -1,5 +1,5 @@
 const app = require('express').Router();
-const { Test, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt } = require('../db');
+const { Test, conn, CodePrompt, Topic, Enrollment, Cohort, User, Course, PromptAttempt, Feedback, CodePromptTest, PromptAttemptTest } = require('../db');
 const { isLoggedIn, isAdmin } = require('./middleware');
 
 module.exports = app;
@@ -19,7 +19,7 @@ app.get('/topics', async(req, res, next)=> {
       include: [{
         model: CodePrompt,
         include: [
-          { model: Test }
+          { model: CodePromptTest }
         ]
       }]
     }));
@@ -83,6 +83,90 @@ app.delete('/users/:id', async(req, res, next)=> {
     const user = await User.findByPk(req.params.id);
     await user.destroy();
     res.sendStatus(201);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
+app.get('/enrollments/:id', async(req, res, next)=> {
+  try {
+    const enrollment = await Enrollment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User
+        },
+        {
+          model: Feedback,
+          include: [ 
+            {
+              model: PromptAttempt,
+              include: [
+                {
+                  model: Enrollment,
+                  include: [
+                    {
+                      model: User,
+                      attributes: ['login']
+                    }
+                  ]
+                }
+              ] 
+            }
+          ]
+        },
+        {
+          model: PromptAttempt,
+          include: [
+            {
+              model: PromptAttemptTest,
+              include: [ Test ]
+            },
+            {
+              model: CodePrompt,
+              include: [ Topic ]
+            },
+            {
+              model: Feedback,
+              include: [
+                {
+                  model: Enrollment,
+                  include: [
+                    {
+                      model: User,
+                      attributes: ['login']
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          model: Cohort,
+          include: [
+            {
+              model: Course
+            },
+            {
+              model: Topic,
+              include: [
+                {
+                  model: CodePrompt,
+                  include: [
+                    {
+                      model: CodePromptTest,
+                      include: [Test]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+    res.send(enrollment);
   }
   catch(ex){
     next(ex);

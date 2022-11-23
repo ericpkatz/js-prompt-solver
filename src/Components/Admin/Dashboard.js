@@ -39,7 +39,7 @@ const AdminDashboard = ()=> {
                               cohort.enrollments.map( ({ user, id, promptAttempts }) => {
                                 return (
                                   <li key={ user.id }>
-                                    <Link to={ `/admin/users/${ user.id }/enrollments/${id}`}>{
+                                    <Link to={ `/admin/enrollments/${ id }`}>{
                                       user.login
                                     } ({ promptAttempts.length })
                                     </Link>

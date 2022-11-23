@@ -125,9 +125,26 @@ export const deleteEnrollment = (enrollmentId)=> {
   };
 };
 
+export const fetchEnrollment = (enrollmentId)=> {
+  return async(dispatch)=> {
+    const response = await axios(`/api/admin/enrollments/${enrollmentId}`, {
+      method: 'get',
+      withCredentials: true,
+    });
+    dispatch({ type: 'SET_ENROLLMENT', enrollment: response.data });
+  };
+};
+
 const courses = (state = [], action)=> {
   if(action.type === 'SET_COURSES'){
     return action.courses;
+  }
+  return state;
+};
+
+const enrollments = (state = {}, action)=> {
+  if(action.type === 'SET_ENROLLMENT'){
+    return {...state, [action.enrollment.id]: action.enrollment };
   }
   return state;
 };
@@ -149,7 +166,8 @@ const topics = (state = [], action)=> {
 const admin = combineReducers({
   courses,
   users,
-  topics: topics
+  topics: topics,
+  enrollments
 });
 
 
