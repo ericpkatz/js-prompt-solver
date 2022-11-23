@@ -69,7 +69,7 @@ const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
   );
 };
 
-const CreatePromptAttemptTest = ({ promptAttempt, updateHook })=> {
+const CreatePromptAttemptTest = ({ promptAttempt, updateHook, createHook })=> {
   const INITIAL = {
     input: '',
     output: '',
@@ -84,12 +84,11 @@ const CreatePromptAttemptTest = ({ promptAttempt, updateHook })=> {
   };
 
   const _createPromptAttemptTest = async()=> {
+    let _promptAttempt = promptAttempt;
     if(!promptAttempt.id){
-      console.log(promptAttempt);
-      alert('need to submit prompt first');
-      return;
+      _promptAttempt = await createHook();
     }
-    await dispatch(createPromptAttemptTest({test, promptAttempt: promptAttempt }));
+    await dispatch(createPromptAttemptTest({test, promptAttempt: _promptAttempt }));
     setTest({ ...INITIAL });
     updateHook();
   };
@@ -206,6 +205,13 @@ else {
     promptAttempt.promptAttemptTests.sort((a, b)=> new Date(a.createdAt) - new Date(b.createdAt));
   }
 
+  const createHook = async()=> {
+    _executeCode();
+    
+    promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: false };
+    promptAttempt = await dispatch(savePromptAttempt(promptAttempt, true));
+    return promptAttempt;
+  };
   return (
     <div>
       <h3>{ codePrompt.title }</h3>
@@ -265,7 +271,7 @@ else {
           );
         })
       }
-    <CreatePromptAttemptTest promptAttempt={ promptAttempt } updateHook={ ()=> {
+    <CreatePromptAttemptTest createHook={ createHook } promptAttempt={ promptAttempt } updateHook={ ()=> {
               runButton.current.focus();
               runButton.current.click();
 

@@ -14,13 +14,16 @@ export const attemptLogin = ()=> {
   };
 };
 
-export const savePromptAttempt = (promptAttempt)=> {
+export const savePromptAttempt = (promptAttempt, special = false)=> {
   return async(dispatch)=> {
     const response = await axios('/api/promptAttempts', {
       method: 'post',
       withCredentials: true,
       data: promptAttempt
     });
+    if(special){
+      return response.data;
+    }
     return dispatch(fetchEnrollments());
   };
 };
