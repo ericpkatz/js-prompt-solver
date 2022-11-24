@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const EnrollmentDetail = ({ enrollment, userView = true })=> {
   const name = ()=> {
@@ -21,10 +22,17 @@ const EnrollmentDetail = ({ enrollment, userView = true })=> {
               <div className='card-body'>
               <h3 className='card-title'>{ promptAttempt.codePrompt.title }</h3>
               <h6 className='card-subtitle text-muted mb-2'>from { promptAttempt.codePrompt.topic.title }</h6>
+              <h4 className='card-subtitle text-muted'>Provided Code</h4>
+              <pre className='mt-2 mb-5'>
+                { promptAttempt.codePrompt.scaffold }
+              </pre>
               <h4 className='card-subtitle text-muted'>{ name() } Submission</h4>
               <pre className='mt-2 mb-5' style={{ border: 'solid 1px black'}}>
                 { promptAttempt.attempt }
               </pre>
+              {
+                !!userView && <Link to={`/history/practice/${promptAttempt.id}`} className='btn btn-sm btn-primary'>Would you like to practice more with this example</Link>
+              }
             {
               !!promptAttempt.promptAttemptTests.length && (
                 <>

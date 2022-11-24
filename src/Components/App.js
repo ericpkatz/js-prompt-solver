@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clear, attemptLogin, logout, fetchCourses, fetchEnrollments, fetchPromptAttempts, fetchFeedbacks, fetchAdmin, fetchFeedbacksTo, fetchAvailableFeedbackMap} from '../store';
 import AdminDashboard from './Admin/Dashboard';
 import AdminCourse from './Admin/Course';
-import AdminEnrollments from './Admin/Enrollments';
+import AdminEnrollments from './Admin/Enrollment';
 import PromptAttempt from './PromptAttempt';
 import Enrollment from './Enrollment';
 import Home from './Home';
@@ -13,6 +13,8 @@ import FeedbackTo from './FeedbackToYou';
 import ProvideFeedback from './ProvideFeedback';
 import LeaveFeedback from './LeaveFeedback';
 import History from './History';
+import Practice from './Practice';
+import Profile from './Profile';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -79,6 +81,7 @@ const App = ()=> {
               auth.isAdmin && <Link className='me-3' to='/admin'>Admin</Link>
             }
                 <Link to='/history' className='me-3'>History</Link>
+                <Link to='/profile' className='me-3'>Profile</Link>
                 <button className='btn btn-primary btn-sm' onClick={ _logout }>Logout</button>
               </div>
             )
@@ -97,7 +100,9 @@ const App = ()=> {
           <Route path='/admin/enrollments/:id' element={ <AdminEnrollments /> } />
           <Route path='/enrollments/:id' element={ <Enrollment /> } />
           <Route path='/feedback' element={ <Feedback /> } />
+          <Route path='/profile' element={ <Profile /> } />
           <Route path='/history' element={ <History /> } />
+          <Route path='/history/practice/:id' element={ <Practice /> } />
           <Route path='/enrollments/:id/feedbacks/:promptAttemptId' element={ <FeedbackTo /> } />
           <Route path='/enrollments/:enrollmentId/feedbacks/:promptAttemptId/leave' element={ <LeaveFeedback /> } />
           <Route path='/promptAttempts/:id/provideFeedback' element={ <ProvideFeedback /> } />
