@@ -127,3 +127,9 @@ pre {
   background-color: gainsboro;
   padding: 0.5rem;
 }
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}

@@ -81,7 +81,9 @@ const App = ()=> {
               auth.isAdmin && <Link className='me-3' to='/admin'>Admin</Link>
             }
                 <Link to='/history' className='me-3'>History</Link>
-                <Link to='/profile' className='me-3'>Profile</Link>
+                <Link to='/profile' className='me-3'>Profile {
+                  !!auth.avatar_url && <img className='avatar' src={ auth.avatar_url } />
+                }</Link>
                 <button className='btn btn-primary btn-sm' onClick={ _logout }>Logout</button>
               </div>
             )

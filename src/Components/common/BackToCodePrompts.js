@@ -4,7 +4,7 @@ import Back from './Back';
 
 const BackToCodePrompts = ({ enrollment })=> {
   return (
-    <Back url={`/enrollments/${enrollment.id}`} text='Back to Prompt Solver' />
+    <Back url={enrollment ? `/enrollments/${enrollment.id}` : '/'} text='Back to Prompt Solver' />
   );
 };
 

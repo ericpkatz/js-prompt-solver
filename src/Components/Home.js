@@ -15,6 +15,9 @@ const Home = ()=> {
   return (
       <div>
       {
+        !enrollments.length && <div className='alert alert-warning mt-3'>You currently have no enrollments</div>
+      }
+      {
         enrollments.map( enrollment => {
           return (
             <div key={ enrollment.id}>

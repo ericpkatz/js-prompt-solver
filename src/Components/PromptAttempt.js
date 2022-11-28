@@ -31,7 +31,7 @@ const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
         Student Test { idx + 1 }
       </td>
       <td>
-        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange }/>
+        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange } autocomplete='off'/>
       </td>
       <td>
         <select name='operator' className='form-control' value={ test.operator } onChange={ onChange }>
@@ -40,7 +40,7 @@ const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
         </select>
       </td>
       <td>
-        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange }/>
+        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange } autocomplete='off'/>
       </td>
       <td>
         <select name='outputDataType' className='form-control' value={ test.outputDataType } onChange={ onChange }>
@@ -97,7 +97,7 @@ const CreatePromptAttemptTest = ({ promptAttempt, updateHook, createHook })=> {
       <td>
       </td>
       <td>
-        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange }/>
+        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange } autoComplete='off'/>
       </td>
       <td>
         <select name='operator' className='form-control' value={ test.operator } onChange={ onChange }>
@@ -106,7 +106,7 @@ const CreatePromptAttemptTest = ({ promptAttempt, updateHook, createHook })=> {
         </select>
       </td>
       <td>
-        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange }/>
+        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange } autoComplete='off'/>
       </td>
       <td>
         <select name='outputDataType' className='form-control' value={ test.outputDataType } onChange={ onChange }>

@@ -15,6 +15,18 @@ const User = conn.define('user', {
       notEmpty: true
     }
   },
+  email: {
+    type: STRING
+  },
+  firstName: {
+    type: STRING
+  },
+  lastName: {
+    type: STRING
+  },
+  avatar_url: {
+    type: STRING
+  },
   access_token: {
     type: STRING,
   },
@@ -106,21 +118,26 @@ User.authenticate = async(code)=> {
     { headers }
   );
 
-  const { login, ...data } = response.data;
+  let { login, email, name, avatar_url, ...data } = response.data;
   let user = await User.findOne({
     where: {
       login
     }
   });
+  console.log(data);
+  const parts = (name || '').split(' ');
+  let firstName = parts.length >= 1 ? parts[0]: null;
+  let lastName = parts.length >= 2 ? parts[1]: null;
+  email = email || null;
   if(!user){
-    user = await User.create({ login, githubData: data, access_token, isAdmin: adminList().includes(login)});
+    user = await User.create({ login, githubData: data, access_token, isAdmin: adminList().includes(login), firstName, lastName, email, avatar_url});
   }
   else {
     let isAdmin = user.isAdmin;
     if(!isAdmin && adminList().includes(login)){
       isAdmin = true;
     }
-    await user.update({githubData: data, access_token, isAdmin });
+    await user.update({githubData: data, access_token, isAdmin , firstName, lastName, email, avatar_url});
   }
   return user.generateToken();;
 e};
