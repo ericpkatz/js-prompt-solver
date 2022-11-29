@@ -13,7 +13,13 @@ const Feedback = conn.define('feedback', {
     allowNull: false
   },
   comments: {
-    type: TEXT
+    type: TEXT,
+    get: function(){
+      if(this.getDataValue('comments')){
+        return this.getDataValue('comments').trim();
+      }
+      return null;
+    }
   },
   reviewed: {
     type: BOOLEAN,

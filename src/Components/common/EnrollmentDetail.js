@@ -31,7 +31,7 @@ const EnrollmentDetail = ({ enrollment, userView = true })=> {
                 { promptAttempt.attempt }
               </pre>
               {
-                !!userView && <Link to={`/history/practice/${promptAttempt.id}`} className='btn btn-sm btn-primary'>Would you like to practice more with this example</Link>
+                !!userView && <Link to={`/history/practice/${promptAttempt.id}`} className='btn btn-sm btn-primary mb-2'>Would you like to practice more with this example</Link>
               }
             {
               !!promptAttempt.promptAttemptTests.length && (
