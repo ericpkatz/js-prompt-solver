@@ -216,10 +216,6 @@ else {
     <div>
       <h3>{ codePrompt.title }</h3>
       <form onSubmit={ save }>
-        <div id='ide'>
-          <div ref={el => setEl(el)}></div>
-          <div className='console' ref={el => setConsole(el)}></div>
-        </div>
       <div>
       <h3>Tests</h3>
       <table className='table'>
@@ -279,6 +275,10 @@ else {
         </tbody>
       </table>
       </div>
+        <div id='ide'>
+          <div ref={el => setEl(el)}></div>
+          <div className='console' ref={el => setConsole(el)}></div>
+        </div>
         <div className='mt-2'>
           <button ref={ runButton } id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>
           <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
