@@ -60,7 +60,7 @@ function limitEval(code, fnOnStop, opt_timeoutInMS) {
   const start = new Date();
   var id = Math.random() + 1,
     blob = new Blob(
-      ['onmessage=function(a){a=a.data;postMessage({i:a.i+1});postMessage({r:eval.call(this,a.c),i:a.i})};'],
+      ['onmessage=function(a){a=a.data;postMessage({i:a.i+1});const result=eval.call(this,a.c);postMessage({r: result ? result.toString(): null,i:a.i})};'],
       { type:'text/javascript' }
     ),
     myWorker = new Worker(URL.createObjectURL(blob));
