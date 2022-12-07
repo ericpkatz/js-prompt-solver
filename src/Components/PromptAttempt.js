@@ -31,7 +31,7 @@ const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
         Student Test { idx + 1 }
       </td>
       <td>
-        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange } autocomplete='off'/>
+        <input className='form-control' placeholder='input' name='input' value={ test.input } onChange={ onChange } autoComplete='off'/>
       </td>
       <td>
         <select name='operator' className='form-control' value={ test.operator } onChange={ onChange }>
@@ -40,7 +40,7 @@ const EditPromptAttemptTest = ({ promptAttemptTest, idx, updateHook })=> {
         </select>
       </td>
       <td>
-        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange } autocomplete='off'/>
+        <input className='form-control' placeholder='output' name='output' value={ test.output } onChange={ onChange } autoComplete='off'/>
       </td>
       <td>
         <select name='outputDataType' className='form-control' value={ test.outputDataType } onChange={ onChange }>
@@ -169,6 +169,7 @@ const PromptAttempt = ({ promptAttempt, codePrompt })=> {
     }).join(';');
     _executeCode(tests + studentTests);
     
+    console.log(document.activeElement);
     promptAttempt = {...promptAttempt, attempt: editor.getValue(), submitted: document.activeElement.id === 'submit' ? true : false };
     await dispatch(savePromptAttempt(promptAttempt));
     dispatch(fetchFeedbacksTo());
@@ -280,8 +281,8 @@ else {
           <div className='console' ref={el => setConsole(el)}></div>
         </div>
         <div className='mt-2'>
-          <button ref={ runButton } id='run' className='btn btn-primary btn-sm me-2' >Run and Save Your Code</button>
-          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id }>Submit Your Code to Get Next Prompt</button>
+          <button ref={ runButton } id='run' className='btn btn-primary btn-sm me-2' onClick={ ev => ev.target.focus()}>Run and Save Your Code</button>
+          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id } onClick={ ev => ev.target.focus()}>Submit Your Code to Get Next Prompt</button>
         </div>
       </form>
     </div>
