@@ -1,0 +1,120 @@
+{
+  "title": "Introduction to JavaScript",
+  "topics": [
+    {
+      "title": "Introduction to functions",
+      "codePrompts": [
+        {
+          "title": "Write A Function Which Adds Two Numbers, Part A",
+          "rank": 1,
+          "scaffold": "function add(a, b){\n\n}",
+          "scaffoldAfter": "",
+          "tests": [
+            {
+              "input": "add(2, 3)",
+              "output": "5",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(3, 4)",
+              "output": "7",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            }
+          ]
+        },
+        {
+          "title": "Write A Function Which Adds Three Numbers",
+          "rank": 2,
+          "scaffold": "function add(){\n\n}",
+          "scaffoldAfter": "",
+          "tests": [
+            {
+              "input": "add(2, 3)",
+              "output": "5",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(3, 4)",
+              "output": "7",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            }
+          ]
+        },
+        {
+          "title": "Write A Function Which Adds Two Numbers, Part C",
+          "rank": 3,
+          "scaffold": "",
+          "scaffoldAfter": "",
+          "tests": [
+            {
+              "input": "add(2, 3)",
+              "output": "5",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(3, 4)",
+              "output": "7",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            }
+          ]
+        },
+        {
+          "title": "ADD n number",
+          "rank": 8,
+          "scaffold": "",
+          "scaffoldAfter": "",
+          "tests": [
+            {
+              "input": "add(2, 3)",
+              "output": "5",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(2, 3, 4)",
+              "output": "9",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)",
+              "output": "10",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            }
+          ]
+        },
+        {
+          "title": "Write A Function Which Adds n Numbers",
+          "rank": 4,
+          "scaffold": "",
+          "scaffoldAfter": "",
+          "tests": [
+            {
+              "input": "add(1, 2, 3)",
+              "output": "6",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            },
+            {
+              "input": "add(3, 4, 5)",
+              "output": "12",
+              "operator": "EQUALS",
+              "outputDataType": "NUMERIC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Passing Arrays to Functions",
+      "codePrompts": []
+    }
+  ]
+}

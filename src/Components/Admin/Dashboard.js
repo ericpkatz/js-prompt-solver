@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateCohort from './CreateCohort';
 import CreateUser from './CreateUser';
+import CreateCourse from './CreateCourse';
 import AddEnrollment from './AddEnrollment';
 import SetTopicForCohort from './SetTopicForCohort';
 import { deleteUser, deleteCohort, deleteEnrollment } from '../../store';
@@ -14,6 +15,7 @@ const AdminDashboard = ()=> {
     <div id='admin-dashboard'>
       <section className='me-3'>
       <h2>Courses</h2>
+      <CreateCourse />
       <ul>
         {
           courses.map( course => {

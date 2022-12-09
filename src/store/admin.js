@@ -83,6 +83,17 @@ export const createCohort = (cohort)=> {
   };
 };
 
+export const createCourse = (data)=> {
+  return async(dispatch)=> {
+    const response = await axios('/api/admin/courses', {
+      method: 'post',
+      withCredentials: true,
+      data: { data } 
+    });
+    dispatch(fetchCourses());
+  };
+};
+
 export const assignTopic = ({ topicId, cohortId })=> {
   return async(dispatch)=> {
     const response = await axios(`/api/admin/cohorts/${cohortId}`, {

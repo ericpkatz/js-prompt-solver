@@ -50,8 +50,11 @@ PromptAttempt.hasMany(PromptAttemptTest);
 
 const syncAndSeed = async()=> {
   await conn.sync({ force: true });
-  const javascript = require('./seed/courses/javascript');
-  return await Course.seed(javascript);
+  if(process.env.SEED){
+    const javascriptCohorts = require('./seed/courses/javascript');
+    const javascriptCourse = require('./seed/courses/javascript_course.json');
+    return await Course.seed(javascriptCohorts, javascriptCourse);
+  }
   
 };
 

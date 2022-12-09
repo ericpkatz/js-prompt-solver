@@ -1,4 +1,5 @@
-const seed = async function({ conn, data }){
+const _createCourse = async({ conn, data})=> {
+  console.log(JSON.stringify(data, null, 2));
   const course = await conn.models.course.create({ title: data.title });
   let topics = data.topics.map( topic => {
     return {
@@ -23,7 +24,15 @@ const seed = async function({ conn, data }){
     }));
   });
   await Promise.all(promises);
-  await Promise.all(data.cohorts.map( async(cohort) => {
+  return course;
+};
+
+const seed = async function({ conn, data, courseData }){
+  const course = await _createCourse({ conn, data: courseData });
+  if(!data){
+    return course;
+  }
+  await Promise.all(data.map( async(cohort) => {
     return conn.models.cohort.create({
       name: cohort.name,
       courseId: course.id,

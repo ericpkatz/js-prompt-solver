@@ -38,6 +38,15 @@ app.post('/users', async(req, res, next)=> {
   }
 });
 
+app.post('/courses', async(req, res, next)=> {
+  try {
+    res.send(await Course.createFromFile(req.body));
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 app.put('/cohorts/:id', async(req, res, next)=> {
   try {
     const cohort = await Cohort.findByPk(req.params.id);

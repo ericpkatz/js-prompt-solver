@@ -282,7 +282,7 @@ else {
         </div>
         <div className='mt-2'>
           <button ref={ runButton } id='run' className='btn btn-primary btn-sm me-2' onClick={ ev => ev.target.focus()}>Run and Save Your Code</button>
-          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id } onClick={ ev => ev.target.focus()}>Submit Your Code to Get Next Prompt</button>
+          <button id='submit' className='btn btn-warning btn-sm' disabled={ !promptAttempt.id || promptAttempt.promptAttemptTests.length === 0 } onClick={ ev => ev.target.focus()}>Submit Your Code to Get Next Prompt { promptAttempt.id && promptAttempt.promptAttemptTests.length === 0 ? '(You need at least one test to submit)': null}</button>
         </div>
       </form>
     </div>
