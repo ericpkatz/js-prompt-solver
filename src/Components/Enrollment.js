@@ -23,7 +23,7 @@ const Enrollment = ()=> {
             <div key={ cohort.id}>
               <ul>
                 <li><strong>Your Course:</strong> { cohort.course.title }</li>
-                <li><strong>Your Cohor:</strong> { cohort.name }</li>
+                <li><strong>Your Cohort:</strong> { cohort.name }</li>
                 {
                  !!cohort.topic && <li><strong>Your Cohorts Current Topic:</strong> { cohort.topic.title }</li>
                 }
