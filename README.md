@@ -1,6 +1,7 @@
 # js-prompt-solver
 
-https://www.youtube.com/watch?v=vEfDwA-46-8
+<a href='https://www.youtube.com/watch?v=vEfDwA-46-8'>Presentation Video</a>
+<a href=''>Research Paper</a>
 
 - npm install
 - create database js_prompt_solver
